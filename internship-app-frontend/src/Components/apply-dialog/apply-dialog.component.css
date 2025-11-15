@@ -1,0 +1,68 @@
+.apply-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    min-width: 320px;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  label {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+  }
+  
+  input[type="file"] {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s ease;
+  }
+  
+  input[type="file"]:hover {
+    border-color: #1976d2;
+  }
+  
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+  
+  .dialog-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
+    text-align: center;
+  }
+  
+  @media (max-width: 600px) {
+    .apply-dialog-content {
+      gap: 1rem;
+      padding: 0.5rem;
+    }
+  
+    .dialog-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  
+    .dialog-actions button {
+      width: 100%;
+    }
+  
+    .dialog-title {
+      font-size: 1.1rem;
+    }
+  }
+  

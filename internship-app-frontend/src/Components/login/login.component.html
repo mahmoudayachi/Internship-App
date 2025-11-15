@@ -1,0 +1,51 @@
+<div class="auth-container">
+    <div class="auth-box">
+      <h2>Login to your account  </h2>
+      <p class="subtitle">choose  your  account type </p>
+       <div class="toggle-buttons" role="tablist">
+        <button
+          class="toggle-btn"
+          [class.active]="selectedForm === 'student'"
+          (click)="selectedForm = 'student'"
+          (change)=" showcurrentaccounttype()"
+          type="button"
+         
+        >
+          I'm a Student 
+        </button>
+        <button
+          class="toggle-btn"
+          [class.active]="selectedForm === 'company'"
+          (click)="selectedForm = 'company'"
+          (change)=" showcurrentaccounttype()"
+          type="button"
+       
+        >
+          I'm a Company 
+        </button>
+      </div>
+  
+      
+  
+      <form [formGroup]="loginform" >
+        <div class="form-group" >
+          <label>Email</label>
+          <input  formControlName="email" type="email" placeholder="Enter your email" required />
+        </div>
+  
+        <div class="form-group">
+          <label>Password</label>
+          <input formControlName="password"   type="password" placeholder="Enter your password" required />
+        </div>
+  
+        <button type="submit" (click)="login()" class="btn-primary">Login</button>
+  
+        <p class="switch-text">
+          Don’t have an account?
+          <a href="signup" >Sign up</a>
+        </p>
+      </form>
+    </div>
+  
+   
+  </div>

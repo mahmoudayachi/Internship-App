@@ -1,0 +1,260 @@
+<div class="dashboard-container">
+   
+    <aside class="sidebar">
+      <div class="logo">Intern<span>Portal</span></div>
+      <nav>
+        <a  (click)="displaydashboards()" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
+        <a (click)="displayapplication()"   routerLinkActive="active"> My Applications</a>
+        <a href="/search" target="_blank">search internship</a>
+        <a  (click)="displaysavedoffer()"> Saved Offers</a>
+        <a (click)="displayupdateprofile()" > update Profile</a>
+        <a  (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+      </nav>
+    </aside>
+  
+    
+    <div class="main-content" *ngIf="displaydashboard" >
+     
+      <header class="topbar">
+        <h2>Welcome, <span class="username">Mahmoud</span></h2>
+        <div class="actions">
+          <i class="fa-solid fa-bell"></i>
+          <img src="http://localhost:8080/student/profileimage/{{currenstudentdata.profileimage}}" alt="profile" class="profile-img" />
+        </div>
+      </header>
+  
+  
+      <section class="stats">
+        <div class="stat-card">
+          <h3>Applications</h3>
+          <p class="value">{{numberofapplications}}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Accepted</h3>
+          <p class="value accepted">{{numberofAcceptedApplications}}</p>
+        </div>
+        <div class="stat-card">
+          <h3>Saved Offers</h3>
+          <p class="value">{{number_of_saved_offers}}</p>
+        </div>
+      </section>
+  
+
+      <section class="offers">
+        <h3>Latest Internship Offers</h3>
+        <div class="offer-list">
+          <div class="offer-card">
+            <div class="offer-info">
+              <h4>Frontend Developer Intern</h4>
+              <p><i class="fa-solid fa-building"></i> NexaTech</p>
+              <p><i class="fa-solid fa-location-dot"></i> Tunis, Tunisia</p>
+            </div>
+            <button class="apply-btn">Apply</button>
+          </div>
+  
+          <div class="offer-card">
+            <div class="offer-info">
+              <h4>Data Science Intern</h4>
+              <p><i class="fa-solid fa-building"></i> AI Vision</p>
+              <p><i class="fa-solid fa-location-dot"></i> Sfax, Tunisia</p>
+            </div>
+            <button class="apply-btn">Apply</button>
+          </div>
+  
+          <div class="offer-card">
+            <div class="offer-info">
+              <h4>UI/UX Design Intern</h4>
+              <p><i class="fa-solid fa-building"></i> DesignFlow</p>
+              <p><i class="fa-solid fa-location-dot"></i> Remote</p>
+            </div>
+            <button class="apply-btn">Apply</button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="apps-container" *ngIf="displayapplications">
+      <header class="apps-header">
+        <div class="header-left">
+          <h2>My Applications</h2>
+        </div>
+    
+        <div class="header-right">
+          <div class="tabs">
+            <button class="tab active">All</button>
+            <button class="tab">Pending</button>
+            <button class="tab">Accepted</button>
+            <button class="tab">Rejected</button>
+          </div>
+        </div>
+      </header>
+    
+      <main class="apps-main">
+      @for( application of listofstudentapplications ; track application.id){
+        <article class="app-card">
+          <img class="company-logo" src="http://localhost:8080/company/Logo/{{application.internshipOffer.company.companyLogo}}" alt="VERMEG logo" />
+    
+          <div class="app-body">
+            <div class="app-top">
+              <div class="title-block">
+                <h3 class="position">{{application.internshipOffer.title}}</h3>
+                <p class="company">{{application.internshipOffer.company.fullName}}</p>
+              </div>
+    
+              <div class="meta-block">
+                <span class="applied-date">Applied:{{application.applicationDate}}</span>
+                <span *ngIf="application.status=='ACCEPTED'" class="status badge accepted">{{application.status}}</span>
+                <span *ngIf="application.status=='REJECTED'" class="status badge rejected">{{application.status}}</span>
+              </div>
+            </div>
+    
+            <p class="short-desc">
+              {{application.internshipOffer.description}}
+            </p>
+    
+            <div class="app-footer">
+              <div class="left-info">
+                <span class="info">Location: {{application.internshipOffer.location}}</span>
+                <span class="info">Duration: {{application.internshipOffer.duration}} months</span>
+                <div class="techs">
+                  <span class="tech">Angular</span>
+                  <span class="tech">TypeScript</span>
+                  <span class="tech">HTML/CSS</span>
+                </div>
+              </div>
+              
+              <div class="pdf-preview">
+                 <button>
+                  <a href="http://localhost:8080/student/pdf/{{application.cv}}" type="application/pdf"
+                  target="_blank"
+                  width="100%"
+                  class="view-btn"
+                  height="120px">
+                  open  cv 
+                </a>
+              </button>
+              <button>
+               <a
+                href="http://localhost:8080/student/pdf/{{application.motivationLetter}}"
+                type="application/pdf"
+                target="_blank"
+                class="view-btn"
+                width="100%"
+                height="120px">
+                open  motivationLetter
+              </a>
+            </button>
+          
+              </div>
+          
+             
+            </div>
+          </div>
+        </article>
+      }
+  
+        
+    
+     
+      </main>
+    
+    
+      <footer class="apps-footer">
+        <div class="empty-note">if you don't have any application a message will show up here .</div>
+      
+      </footer>
+    </div>
+
+
+    <div class="profile-container" *ngIf="updateprofile" [formGroup]="updateprofileform">
+      <h2>update  profile</h2>
+    
+      <form class="profile-form"  enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="fullname">fullName</label>
+          <input  formControlName="fullName"   type="text" id="fullname"  name="fullname" required>
+        </div>
+    
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input formControlName="email"  type="email" id="email"  name="email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email"> new password</label>
+          <input formControlName="password"  type="email" id="email"  name="email" required>
+        </div>
+    
+        <div class="form-group">
+          <label for="bio">Bio</label>
+          <textarea formControlName="bio" id="bio"  name="bio" rows="4"></textarea>
+        </div>
+    
+        <div class="form-group file-input">
+          <label for="profilePicture">profile picture</label>
+          <input type="file" id="profilePicture" (change)="onFileSelected($event)">
+        </div>
+    
+        <div class="form-actions">
+          <button type="submit" (click)=" onSubmit()" mat-flat-button color="primary">update</button>
+        
+        </div>
+      </form>
+    </div>
+    
+    
+    <section class="offers" *ngIf="displaysavedoffers">
+      @for(offer of list_of_saved_offers ; track offer.id){
+       <div class="app-card">
+         <img class="company-logo" src="http://localhost:8080/company/Logo/{{offer.company.companyLogo}}" alt="VERMEG logo" />
+   
+         <div class="app-body">
+           <div class="app-top">
+             <div class="title-block">
+               <h3 class="position">{{offer.title}}</h3>
+               <p class="company">{{offer.company.fullName}}</p>
+             </div>
+   
+             <div class="meta-block">
+               <span *ngIf="offer.status=='AVAILABLE'" class="status badge available">{{offer.status}}</span>
+               <span *ngIf="offer.status=='EXPIRED'" class="status badge expired">{{offer.status}}</span>
+             </div>
+           </div>
+   
+           <p class="short-desc">
+             {{offer.description}}
+             Développement d’interfaces web réactives avec Angular. Participation aux revues de
+             conception UI/UX.
+           </p>
+   
+           <div class="app-footer">
+             <div class="left-info">
+               <span class="info">Location: {{offer.location}}</span>
+               <span class="info">Duration: {{offer.duration}} months</span>
+               <div class="techs">
+                 <span class="tech">Angular</span>
+                 <span class="tech">TypeScript</span>
+                 <span class="tech">HTML/CSS</span>
+                
+               </div>
+              
+             </div>
+             <div class="actions">
+              
+               <button   class="btn secondary" (click)="deletesavedoffer(offer.id)">unsave</button>
+             </div>
+           </div>
+           
+         </div>
+         
+       </div>
+     }
+     
+     
+ 
+     </section>
+
+  </div>
+
+
+  

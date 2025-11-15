@@ -1,0 +1,275 @@
+<div class="dashboard-container">
+    <aside class="sidebar" [class.open]="sidebarOpen">
+      <div class="sidebar-header">
+        <h2>Company Panel</h2>
+        <button class="close-btn" (click)="toggleSidebar()">✖</button>
+      </div>
+      <ul>
+        <li><a  (click)="displaymaindashboard()" routerLinkActive="active" > Dashboard</a></li>
+        <li><a  (click)=" DispalyAddInternshipPost()" routerLinkActive="active"> Post Offer</a></li>
+        <li><a  routerLinkActive="active" (click)="Displaycurrentoffers()"> My Offers</a></li>
+        <li><a  routerLinkActive="active" (click)=" displayReceivedApplicaitons()">Applications</a></li>
+        <li><a routerLinkActive="active" (click)=" displayupdateprofile()"> Profile</a></li>
+        <li><a  (click)="logout()">Logout</a></li>
+      </ul>
+    </aside>
+  
+    
+    <div *ngIf="maindashboardisclicked" class="main-content">
+      <header class="topbar">
+        <button class="menu-btn" (click)="toggleSidebar()">☰</button>
+        <h1>Welcome, {{ companyName }}</h1>
+        <div class="profile">
+          <img  src="http://localhost:8080/company/Logo/{{Logo}}" alt="Company Logo">
+        </div>
+      </header>
+  
+      <section class="content">
+        <div class="stats">
+          <div class="card">
+            <h3>Active Offers</h3>
+            <p>{{ activeOffers }}</p>
+          </div>
+          <div class="card">
+            <h3>Applicants</h3>
+            <p>{{ applicants }}</p>
+          </div>
+          <div class="card">
+            <h3>Accepted Interns</h3>
+            <p>{{ acceptedInterns }}</p>
+          </div>
+        </div>
+  
+        <div class="recent-section">
+          <h2>Recent Applications</h2>
+          <div class="applications-list">
+            <div class="app-card" *ngFor="let app of recentApplications">
+              <h4>{{ app.studentName }}</h4>
+              <p>{{ app.offerTitle }}</p>
+              <span class="status" [class.pending]="app.status === 'Pending'" [class.accepted]="app.status === 'Accepted'" [class.rejected]="app.status === 'Rejected'">
+                {{ app.status }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div *ngIf="addpostclicked" class="post-offer-container">
+        <h2>Post an Internship Offer</h2>
+      
+        <form class="offer-form" [formGroup]="internshippost">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input  formControlName="title" type="text" id="title" placeholder="e.g. Frontend Developer Intern" required>
+          </div>
+      
+      
+          <div class="form-row">
+            <div class="form-group">
+              <label for="duration">Duration (months)</label>
+              <input  formControlName="duration"  type="number" id="duration" placeholder="e.g. 3" min="1" required>
+            </div>
+      
+            <div class="form-group">
+              <label for="type">Type</label>
+              <select formControlName="internshiptype" id="type" required>
+                <option value="">Select type</option>
+                <option value="ONSITE">ONSITE</option>
+                <option value="REMOTE">REMOTE</option>
+                <option value="HYBRID">Hybrid</option>
+              </select>
+            </div>
+          </div>
+      
+          <div class="form-row">
+            <div class="form-group">
+              <label for="location">Location</label>
+              <input formControlName="location"  type="text" id="location" placeholder="e.g. Tunis, Tunisia" required>
+            </div>
+      
+            
+          </div>
+          
+
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input formControlName="startDate" type="date" id="startDate" required>
+          </div>
+          <div class="form-group">
+            <label for="startDate">End Date</label>
+            <input formControlName="endDate" type="date" id="startDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="Applydeadline">Apply Deadline</label>
+            <input formControlName="applydeadline" type="date" id="Applydeadline" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="skills">Required Skills</label>
+            <input formControlName="requirements" type="text" id="skills" placeholder="e.g. Angular, Java, Spring Boot" required>
+          </div>
+      
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea formControlName="description" id="description" rows="5" placeholder="Describe the internship..." required></textarea>
+          </div>
+      
+          <button type="submit" class="btn-submit" (click)="Submitpost()">Post Offer</button>
+        </form>
+      </div>
+
+      <div class="offers-container" *ngIf="currentinternshipofferclicked">
+        <h2>Current Internship Offers</h2>
+      
+        <div class="offers-grid">
+          @for (post of listofinternshipposts; track post.id) {
+          <div class="offer-card">
+            
+            <div class="offer-header" >
+              
+              <h3>{{post.title}}</h3>
+              <div>
+              <select (change)="changestatus($event,post.id)">
+                <option value="{{post.status}}"><span class="offer-type remote">{{post.status}}</span></option>
+                <option *ngIf="post.status==AVAILABLE" value="EXPIRED">EXPIRED</option>
+                <option *ngIf="post.status==EXPIRED" value="AVAILABLE">AVAILABLE</option>
+              </select>
+              <span class="offer-type remote">{{post.internshiptype}}</span>
+              </div>
+            </div>
+            
+             <p class="offer-company">{{post.company.fullName}}</p>
+             <p class="offer-location"><i class="fa-solid fa-location-dot"></i><b>Location : </b>{{post.company.location}}</p>
+             <p class="offer-duration"> <b>duration : </b>{{post.duration}} months</p>
+             <p class="offer-start"> <b>startdate : </b> {{post.startDate}}</p>
+             <p class="offer-desc"><b>Post description  : </b>
+             {{post.description}}
+            </p>
+            <div>
+            <button class="btn-view">View Details</button>
+            <button class="delete-btn"(click)="deleteInternshipPost(post.id)">Delete</button>
+          </div>
+           </div>
+          
+        }
+        
+        
+        </div>
+      </div>
+
+      <section class="applications-section" *ngIf="receivedapplications">
+        <h2 class="section-title">Received Applications</h2>
+      @for(app of listofapplications ; track app.id ){
+        <div class="application-card">
+          <div class="applicant-info">
+            <img src="http://localhost:8080/student/profileimage/{{app.student.profileimage}}" alt="Applicant photo" class="applicant-img">
+            <div class="applicant-details">
+              <h3 class="applicant-name">{{app.student.fullName}}</h3>
+              <p class="applicant-position">Applying for: {{app.internshipOffer.title}}</p>
+              <p class="applicant-date">Applied on: Oct 25, 2025</p>
+              <button class="files-btn">
+                <a
+                 href="http://localhost:8080/student/pdf/{{app.motivationLetter}}"
+                 type="application/pdf"
+                 target="_blank"
+                 
+                 width="100%"
+                 height="120px">
+                 open  motivationLetter
+               </a>
+             </button>
+             <button class="files-btn">
+              <a
+               href="http://localhost:8080/student/pdf/{{app.cv}}"
+               type="application/pdf"
+               target="_blank"
+               
+               width="100%"
+               height="120px">
+               open  cv
+             </a>
+           </button>
+             
+            </div>
+          </div>
+          <div class="application-actions">
+           
+            <button *ngIf="app.status == 'PENDING'" (click)=" AcceptOffer(app.id)" class="Accept-btn">Accept</button>
+            <button *ngIf="app.status == 'PENDING'"  (click)="RejectOffer(app.id)" class="Reject-btn">Reject</button>
+            <button *ngIf="app.status == 'ACCEPTED'"   class="Accepted-btn">ACCEPTED</button>
+            <button *ngIf="app.status == 'REJECTED'"   class="Rejected-btn">REJECTED</button>
+          </div>
+      
+        </div>
+      }
+     </section>
+      
+     
+    
+        
+     
+     
+
+      <div class="profile-container" *ngIf="updateprofileclicked">
+        <div class="profile-card">
+          <h2>Update Company Profile</h2>
+          <form class="profile-form" [formGroup]="updateProfileForm" (ngSubmit)="onSubmit()">
+      
+      
+            <div class="form-group logo-section">
+              <label for="logo" class="logo-label">Company Logo</label>
+              <div class="logo-preview">
+                <img src="{{logoPreview}}" alt="Company Logo" />
+              </div>
+              <input type="file" id="logo" accept="image/*" (change)="onLogoSelected($event)" />
+            </div>
+      
+         
+            <div class="form-group">
+              <label for="name">Company Name</label>
+              <input type="text" id="name" formControlName="fullName" placeholder="Enter company name" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="name">Email</label>
+              <input type="email" id="name" formControlName="email" placeholder="Enter email" required />
+            </div>
+            <div class="form-group">
+              <label for="name"> New password</label>
+              <input type="password" id="name" formControlName="password" placeholder="Enter company new password" required />
+            </div>
+          
+            <div class="form-group">
+              <label for="size">Company Size</label>
+              <select id="size" formControlName="companysize" required>
+                <option value="">Select size</option>
+                <option value="1-10 employees" >1-10 employees</option>
+                <option value="11-50 employees" >11-50 employees</option>
+                <option value="51-200 employees">51-200 employees</option>
+                <option value="200+ employees">200+ employees</option>
+              </select>
+            </div>
+      
+          
+            <div class="form-group">
+              <label for="description">Company Description</label>
+              <textarea id="description" formControlName="description" rows="4" placeholder="Describe your company..."></textarea>
+            </div>
+      
+         
+            <div class="form-group">
+              <label for="location">Location</label>
+              <input type="text" id="location" formControlName="location" placeholder="Enter location" required />
+            </div>
+      
+            
+            <button  type="submit" class="save-btn">Save Changes</button>
+          </form>
+        </div>
+      </div>
+      
+
+
+  </div>

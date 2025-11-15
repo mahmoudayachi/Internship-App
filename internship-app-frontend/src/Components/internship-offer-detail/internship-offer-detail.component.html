@@ -1,0 +1,49 @@
+<div class="offer-detail-container">
+ 
+    <div class="offer-header">
+      <img
+        class="company-logo"
+        src="http://localhost:8080/company/Logo/{{InternshipPostdetails.company.companyLogo}}"
+        alt="Company Logo"
+      />
+      <div class="header-info">
+        <h2 class="offer-title">{{InternshipPostdetails.title}}</h2>
+        <p class="company-name">{{InternshipPostdetails.company.fullName}}</p>
+        <p class="offer-type">{{InternshipPostdetails.internshiptype}}</p>
+        <p  *ngIf="InternshipPostdetails.status == 'EXPIRED'" class="offer-type expired">{{InternshipPostdetails.status}}</p>
+        <p  *ngIf="InternshipPostdetails.status == 'AVAILABLE'" class="offer-type available">{{InternshipPostdetails.status}}</p>
+      </div>
+    </div>
+  
+    <div class="offer-body">
+      <h3>About the Internship</h3>
+      <p>
+        {{InternshipPostdetails.description}}.
+      </p>
+  
+      <h3>Requirements</h3>
+      <ul>
+        <li>Strong knowledge of Angular or React</li>
+        <li>Basic understanding of REST APIs</li>
+        <li>Good problem-solving and communication skills</li>
+      </ul>
+  
+      <h3>Technologies</h3>
+      <div class="tech-tags">
+        <span class="tag">Angular</span>
+        <span class="tag">TypeScript</span>
+        <span class="tag">HTML/CSS</span>
+      </div>
+  
+      <h3>Additional Information</h3>
+      <p><strong>Duration:</strong> {{InternshipPostdetails.duration}} months</p>
+      <p><strong>Location:</strong> {{InternshipPostdetails.location}}</p>
+      <p><strong>Posted on:</strong> {{InternshipPostdetails.createdAt}}</p>
+    </div>
+  
+    <div class="offer-footer">
+      <button class="apply-btn" [disabled]=" !Offerisexpired(InternshipPostdetails.status)" (click)="openDialog()" >Apply Now</button>
+    </div>
+  
+  </div>
+ 

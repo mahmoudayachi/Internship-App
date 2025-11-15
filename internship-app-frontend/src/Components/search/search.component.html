@@ -1,0 +1,106 @@
+<div class="search-container">
+  
+    <aside class="filters">
+      <h2>Filters</h2>
+  
+      <div class="filter-group">
+        <label>Location</label>
+        <input type="text" (input)="onlocationChange($event)" placeholder="e.g., Tunis, Sousse..." />
+      </div>
+  
+      <div class="filter-group">
+        <label>Internship Type</label>
+        <select (change)="ontypeChange($event)" >
+          <option value="">All</option>
+          <option value="REMOTE">Remote</option>
+          <option value="ONSITE">ONSITE</option>
+          <option value="HYBRID">HYBRID</option>
+        </select>
+      </div>
+  
+      <div class="filter-group">
+        <label>Duration</label>
+        <select (change)="ondurationchange($event)" >
+          <option value="">Any</option>
+          <option value="1">1 Month</option>
+          <option value="3">3 Months</option>
+          <option value="6">6+ Months</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>status</label>
+        <select (change)="onstatusChange($event)" >
+          <option value="">Any</option>
+          <option value="AVAILABLE">AVAILABLE</option>
+          <option value="EXPIRED">EXPIRED</option>
+        </select>
+      </div>
+  
+      <div class="filter-group">
+        <label>Keyword</label>
+        <input type="text" (input)="onsearchChange($event)"  placeholder="Search by title " />
+      </div>
+
+     <div class="filter-group">
+     <label for="technology">Technology</label>
+     <input
+       type="text"
+      id="technology"
+     placeholder="e.g. Angular, Spring Boot" (input)="onFilterChange()" />
+     </div>
+  
+      <button class="filter-btn" (click)="loadInternships()">Apply Filters</button>
+    </aside>
+  
+    <section class="offers">
+     @for(offer of listofinternshippost ; track offer.id){
+      <div class="app-card">
+        <img class="company-logo" src="http://localhost:8080/company/Logo/{{offer.company.companyLogo}}" alt="VERMEG logo" />
+  
+        <div class="app-body">
+          <div class="app-top">
+            <div class="title-block">
+              <h3 class="position">{{offer.title}}</h3>
+              <p class="company">{{offer.company.fullName}}</p>
+            </div>
+  
+            <div class="meta-block">
+              <span *ngIf="offer.status=='AVAILABLE'" class="status badge available">{{offer.status}}</span>
+              <span *ngIf="offer.status=='EXPIRED'" class="status badge expired">{{offer.status}}</span>
+            </div>
+          </div>
+  
+          <p class="short-desc">
+            {{offer.description}}
+            Développement d’interfaces web réactives avec Angular. Participation aux revues de
+            conception UI/UX.
+          </p>
+  
+          <div class="app-footer">
+            <div class="left-info">
+              <span class="info">Location: {{offer.location}}</span>
+              <span class="info">Duration: {{offer.duration}} months</span>
+              <div class="techs">
+                <span class="tech">Angular</span>
+                <span class="tech">TypeScript</span>
+                <span class="tech">HTML/CSS</span>
+               
+              </div>
+             
+            </div>
+            <div class="actions">
+              <button (click)="viewofferdetails(offer.id)"  class="btn secondary">view</button>
+              <button (click)="savepost(offer.id)" id="save"  class="save-btn" >save</button>
+            </div>
+          </div>
+          
+        </div>
+        
+      </div>
+    }
+    
+    
+
+    </section>
+  </div>

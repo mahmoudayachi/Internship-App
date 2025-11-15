@@ -1,0 +1,112 @@
+<div class="auth-container">
+    <div class="auth-box">
+      <h2>Create Your Account </h2>
+      <p class="subtitle">Join our internship community</p>
+  
+      <div class="toggle-buttons" role="tablist">
+        <button
+          class="toggle-btn"
+          [class.active]="selectedForm === 'student'"
+          (click)="selectedForm = 'student'"
+          type="button"
+         
+        >
+          I'm a Student 
+        </button>
+        <button
+          class="toggle-btn"
+          [class.active]="selectedForm === 'company'"
+          (click)="selectedForm = 'company'"
+          type="button"
+       
+        >
+          I'm a Company 
+        </button>
+      </div>
+  
+     
+      <form *ngIf="selectedForm === 'student'" class="form"[formGroup] ="signupstudent">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input formControlName="fullName" type="text" autocomplete="" placeholder="Enter your full name" required />
+          </div> 
+        </div>
+        <p class="input-warning-message" *ngIf="signupstudent.controls['fullName'].invalid && signupstudent.controls['fullName'].touched"> this field must not be empty</p>
+        <div class="form-group" >
+            <label>Email</label>
+            <input formControlName="email" type="email" placeholder="Enter your email" required />
+          </div>
+          <p class="input-warning-message" *ngIf="signupstudent.controls['email'].invalid && signupstudent.controls['email'].touched"> this field must not be empty</p>
+        <div class="form-group">
+          <label>Password</label>
+          <input formControlName="password" type="password" placeholder="Enter your password" required />
+        </div>
+        <p class="input-warning-message" *ngIf="signupstudent.controls['password'].invalid && signupstudent.controls['password'].touched"> this field must not be empty</p>
+        <button (click)="singupstudent()" type="submit" class="btn-primary">Sign Up as Student</button>
+  
+        <p class="switch-text">
+          Already have an account?
+          <a routerLink="/login" href="login">Login</a>
+        </p>
+      </form>
+  
+ 
+      <form *ngIf="selectedForm === 'company'" class="form" [formGroup]="signupcompany">
+       
+
+        <div class="form-group">
+          <label>Company Name</label>
+          <input formControlName="fullName" type="text" placeholder="Enter your company name" required />
+        </div>
+        <p class="input-warning-message" *ngIf="signupcompany.controls['fullName'].invalid && signupcompany.controls['fullName'].touched"> this field must not be empty</p>
+        <div class="form-group">
+          <label>Email</label>
+          <input formControlName="email" type="email" placeholder="Enter company email" required />
+        </div>
+        <p class="input-warning-message" *ngIf="signupcompany.controls['email'].invalid && signupcompany.controls['email'].touched"> this field must not be empty</p>
+        <div class="form-group">
+          <label>Password</label>
+          <input formControlName="password" type="password" placeholder="Enter company password" required />
+        </div>
+        <p class="input-warning-message" *ngIf="signupcompany.controls['password'].invalid && signupcompany.controls['password'].touched"> this field must not be empty</p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Company Size</label>
+            <select formControlName="companysize" required>
+              <option value="">Select size</option>
+              <option value="1-10 employees">1-10 employees</option>
+              <option value="11-50 employees">11-50 employees</option>
+              <option value="50+ employees">50+ employees</option>
+            </select>
+          </div>
+        </div>
+        <p class="input-warning-message" *ngIf="signupcompany.controls['companysize'].invalid && signupcompany.controls['companysize'].touched"> this field must not be empty</p>
+        
+        <div class="form-group">
+            <label>Location </label>
+            <input  formControlName="location"  type="text" placeholder="City, Country" required />
+          </div>
+          <p class="input-warning-message" *ngIf="signupcompany.controls['location'].invalid && signupcompany.controls['location'].touched"> this field must not be empty</p>
+        <div class="form-group">
+          <label>Company Logo</label>
+          <input (change)="onFileSelected($event)" type="file" accept="image/*" />
+        </div>
+        <p class="input-warning-message" *ngIf="  selectfiletouched && selectedFile==null"> this field must not be empty</p>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea  formControlName="description" placeholder="Describe your company..." rows="3"></textarea>
+        </div>
+        <p class="input-warning-message" *ngIf="signupcompany.controls['description'].invalid && signupcompany.controls['description'].touched"> this field must not be empty</p>
+
+        <button (click)="singupcompany()"  type="submit" class="btn-primary">Sign Up as Company</button>
+  
+        <p class="switch-text">
+          Already have an account?
+          <a routerLink="/login" href="login">Login</a>
+        </p>
+      </form>
+    </div>
+</div> 

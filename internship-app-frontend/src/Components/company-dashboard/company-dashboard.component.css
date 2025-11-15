@@ -1,0 +1,759 @@
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f9fafb;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 250px;
+    background-color: #1e293b;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .sidebar h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 2rem;
+  }
+  
+  .sidebar ul li {
+    margin-bottom: 1rem;
+  }
+  
+  .sidebar ul li a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 1rem;
+    display: block;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+  
+  .sidebar ul li a:hover,
+  .sidebar ul li a.active {
+    background-color: #334155;
+    color: #fff;
+  }
+  
+
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    height: 100%;
+    z-index: 999;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+
+  .topbar {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .menu-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    display: none;
+  }
+  
+  .profile img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+  }
+  
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+  
+  .content {
+    padding: 2rem;
+  }
+  
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+  }
+  
+  .card h3 {
+    color: #475569;
+    font-size: 1.1rem;
+  }
+  
+  .card p {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2563eb;
+  }
+  
+  
+  .recent-section {
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .applications-list {
+    margin-top: 1rem;
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .app-card {
+    background: #f8fafc;
+    padding: 1rem;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .app-card h4 {
+    margin: 0;
+    color: #1e293b;
+  }
+  
+  .app-card p {
+    margin: 0;
+    color: #64748b;
+  }
+  
+  .status {
+    font-weight: bold;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+  }
+  
+  .status.pending {
+    background-color: #facc15;
+    color: #fff;
+  }
+  
+  .status.accepted {
+    background-color: #22c55e;
+    color: white;
+  }
+  
+  .status.rejected {
+    background-color: #ef4444;
+    color: white;
+  }
+  
+
+  @media (min-width: 768px) {
+    .sidebar {
+      transform: none;
+      position: static;
+    }
+  
+    .menu-btn {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .menu-btn {
+      display: block;
+    }
+  
+    .topbar h1 {
+      font-size: 1rem;
+    }
+  }
+
+
+
+  .post-offer-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    overflow-y: auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    font-family: "Poppins", sans-serif;
+  }
+  
+  .post-offer-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+  }
+  
+  
+  .offer-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #444;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0,123,255,0.2);
+    outline: none;
+  }
+  
+ 
+  .form-row {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+  }
+  
+ 
+  .btn-submit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .btn-submit:hover {
+    background-color: #0056b3;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .form-row {
+      flex-direction: column;
+    }
+  
+    .post-offer-container {
+      
+      padding: 20px;
+    }
+  }
+  
+
+
+
+
+  .offers-container {
+    width: 80%;
+    margin: 20px auto;
+    padding: 5px;
+    font-family: "Poppins", sans-serif;
+    
+  }
+  
+  .offers-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 28px;
+  }
+  
+
+  .offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+  }
+  
+ 
+  .offer-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .offer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+  
+  
+  .offer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .offer-header h3 {
+    font-size: 18px;
+    color: #007bff;
+    margin: 0;
+  }
+  
+  .delete-btn{
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 18px; 
+    cursor: pointer;
+    border-radius: 8px;
+    align-self: flex-start;
+  }
+  .offer-type {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 1rem;
+    color: white;
+  }
+  
+  .offer-type.remote {
+    background-color: #28a745;
+  }
+  .offer-type.onsite {
+    background-color: #dc3545;
+  }
+  .offer-type.hybrid {
+    background-color: #ffc107;
+    color: #333;
+  }
+  
+ 
+  .offer-company {
+    font-weight: 600;
+    color: #222;
+    margin: 4px 0;
+  }
+  
+  .offer-location {
+    font-size: 14px;
+    color: #555;
+    margin: 2px 0;
+  }
+  
+  .offer-duration,
+  .offer-start {
+    font-size: 14px;
+    color: #555;
+    margin: 2px 0;
+  }
+  
+  .offer-desc {
+    font-size: 14px;
+    color: #444;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  
+  
+  .btn-view {
+    align-self: flex-start;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    margin-top: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .btn-view:hover {
+    background-color: #0056b3;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .offers-container{
+      overflow-y:auto ;
+      }
+    .offer-card {
+      padding: 18px;
+    }
+  
+    .offer-header h3 {
+      font-size: 16px;
+    }
+  
+    .offers-container h2 {
+      font-size: 22px;
+    }
+  }
+
+
+
+
+
+  .profile-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    overflow-y: auto;
+    font-family: "Poppins", sans-serif;
+ 
+  }
+  
+  .profile-card {
+    background: #fff;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    max-width: 600px;
+    width: 100%;
+    transition: transform 0.3s ease;
+  }
+  
+  .profile-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .profile-card h2 {
+    text-align: center;
+    color: #2a2a2a;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.3s;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: #007bff;
+  }
+  
+  .logo-section {
+    align-items: center;
+  }
+  
+  .logo-preview {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .logo-preview img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+  }
+  
+  input[type="file"] {
+    border: none;
+    font-size: 0.95rem;
+  }
+  
+  .save-btn {
+    width: 100%;
+    background: #007bff;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .save-btn:hover {
+    background: #0056b3;
+  }
+  
+
+  @media (max-width: 600px) {
+    .profile-card {
+      padding: 25px;
+    }
+  
+    .profile-card h2 {
+      font-size: 1.5rem;
+    }
+  
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-size: 0.95rem;
+    }
+  
+    .save-btn {
+      font-size: 1rem;
+    }
+  }
+
+
+  body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .applications-section {
+    width: 80%;
+    margin: 40px auto;
+    padding: 10px;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
+  }
+  
+  .application-card {
+    width: 100%;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+    margin: 0 auto 25px auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .application-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  .applicant-info {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+  }
+  
+  .applicant-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+  
+  }
+  
+  .applicant-details {
+    flex: 1;
+  }
+  
+  .applicant-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
+    margin: 0;
+  }
+  
+  .applicant-position {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 6px;
+  }
+  
+  .applicant-date {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 2px;
+  }
+  
+  .application-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    text-decoration: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+  }
+  
+  .view-btn {
+    background-color: #0069d9;
+    color: #fff;
+  }
+  
+  .view-btn:hover {
+    background-color: #0069d9;
+  }
+  
+  .message-btn {
+    background-color: #c41c1c;
+    color: white;
+  }
+  .Accept-btn{
+    background-color: #0069d9;
+    padding: 0.8rem;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  .Reject-btn{
+    background-color: #c41c1c;
+    color: white;
+    padding: 0.8rem;
+    border-radius:5px ;
+    border: none;
+    cursor: pointer;
+  }
+  .Reject-btn.disabled{
+    display: none;
+  }
+
+  .Accepted-btn{
+    background-color: #03a110;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+  }
+  
+  .Rejected-btn{
+    background-color: #c90808;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+  }
+
+
+  .files-btn{
+    background-color: #0069d9;
+    color: white;
+    padding: 0.3rem;
+    border: none;
+    border-radius: 3px;
+    margin: 0.5rem;
+
+  }
+
+  .files-btn > a {
+    color: white;
+    text-decoration: none;
+  }
+
+  
+  
+  @media (max-width: 1024px) {
+    .applications-section {
+      width: 90%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .applications-section {
+      width: 95%;
+    }
+  
+    .applicant-info {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .applicant-img {
+      width: 75px;
+      height: 75px;
+    }
+  
+    .applicant-details {
+      text-align: left;
+    }
+  
+    .application-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+
