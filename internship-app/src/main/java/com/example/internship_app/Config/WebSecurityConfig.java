@@ -40,6 +40,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(request -> request.requestMatchers("/api/**").permitAll()
                         .requestMatchers("/company/**").permitAll()
                         .requestMatchers("/student/**").permitAll()
+                        .requestMatchers("/Admin/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)

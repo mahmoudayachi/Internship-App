@@ -1,0 +1,188 @@
+<div class="dashboard">
+
+
+    <aside class="sidebar">
+      <div class="logo">Admin<span>Panel</span></div>
+  
+      <nav>
+        <a  (click)="displaydashboard()">Dashboard</a>
+        <a (click)="Getallstudents()">Manage Students</a>
+        <a (click)="Getallcompanies()">Manage Companies</a>
+        <a (click)="logout()" class="logout">Logout</a>
+      </nav>
+    </aside>
+  
+
+    <div class="main" *ngIf="main_dashboard_displayed">
+  
+
+      <header class="topbar">
+        <h2>Welcome, <span>Admin</span></h2>
+      </header>
+  
+     
+      <section class="stats">
+        <div class="card">
+          <p>Total Interns</p>
+          <h3>{{number_of_students}}</h3>
+        </div>
+  
+        <div class="card">
+          <p>Total Companies</p>
+          <h3>{{number_of_companies}}</h3>
+        </div>
+  
+        <div class="card success">
+          <p>Active Offers</p>
+          <h3>{{number_of_internshippost}}</h3>
+        </div>
+  
+      
+      </section>
+
+      <section class="table-section">
+        <h3>Recent Applications</h3>
+  
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Internship</th>
+                <th>Company</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+  
+            <tbody>
+              <tr>
+                <td>Ahmed Ben Ali</td>
+                <td>Frontend Intern</td>
+                <td>NexaTech</td>
+                <td><span class="badge pending">Pending</span></td>
+                <td><button>View</button></td>
+              </tr>
+  
+              <tr>
+                <td>Sarah Trabelsi</td>
+                <td>Data Science Intern</td>
+                <td>AI Vision</td>
+                <td><span class="badge accepted">Accepted</span></td>
+                <td><button>View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+  
+    </div>
+
+    <div class="table-container" *ngIf="student_management_displayed">
+
+      <h2>Students Management</h2>
+    
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>profile image</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Accountstatus</th>
+              <th>date de creation</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+    
+          <tbody>
+            <tr *ngFor="let s of list_of_students">
+              <td><img src="http://localhost:8080/student/profileimage/{{s.profileimage}}"></td>
+              <td data-label="Name">{{ s.fullName }}</td>
+              <td data-label="Email">{{ s.email }}</td>
+              <td>
+                <select  [ngClass]="s.accountStatus === 'DESACTIVATED' ? 'select-desactivated' : 'select-activated'"  (change)="updatestudentAccountstatus($event,s.id)">
+                <option   value={{s.accountStatus}}>{{s.accountStatus}}</option>
+                <option  [value]="s.accountStatus ==='ACTIVATED'?'DESACTIVATED':'ACTIVATED'" > {{ s.accountStatus === 'ACTIVATED' ? 'DESACTIVATED' : 'ACTIVATED' }}</option>
+                </select>
+              </td>
+              <td>{{s.createdAt}}</td>
+              <td data-label="Actions">
+                <button class="view">View</button>
+                <button class="delete">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+      <div class="pagination">
+        <button (click)="prevPage()" [disabled]="currentPage === 0">
+          Previous
+        </button>
+    
+        <span>Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+    
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
+          Next
+        </button>
+      </div>
+    
+    </div>
+
+    <div class="table-container" *ngIf="company_management_displayed">
+
+      <h2>Company Management</h2>
+    
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>company-logo</th>
+              <th>companyname</th>
+              <th>companyEmail</th>
+              <th>Accountstatus</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+    
+          <tbody>
+            <tr *ngFor="let s of list_of_companies">
+              <td><img src="http://localhost:8080/company/Logo/{{s.companyLogo}}"></td>
+              <td data-label="Name">{{ s.fullName }}</td>
+              <td data-label="Email">{{ s.email }}</td>
+              <td>
+                <select  [ngClass]="s.accountStatus === 'DESACTIVATED' ? 'select-desactivated' : 'select-activated'"  (change)="updateCompanyAccountstatus($event,s.id )">
+                <option   value={{s.accountStatus}}>{{s.accountStatus}}</option>
+                <option  [value]="s.accountStatus ==='ACTIVATED'?'DESACTIVATED':'ACTIVATED'" > {{ s.accountStatus === 'ACTIVATED' ? 'DESACTIVATED' : 'ACTIVATED' }}</option>
+                </select>
+              </td>
+              <td data-label="Actions">
+                <button class="view">View</button>
+                <button class="delete">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    
+      
+      <div class="pagination">
+        <button (click)="prevPage()" [disabled]="currentPage === 0">
+          Previous
+        </button>
+    
+        <span>Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+    
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
+          Next
+        </button>
+      </div>
+    
+    </div>
+      
+  </div>
+
+
+ 

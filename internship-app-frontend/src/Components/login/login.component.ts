@@ -35,7 +35,6 @@ export class LoginComponent {
         next:(res=>{
           console.log(res)
           if(res.userId!=null){
-            alert(" user logged in successfully")
             const user = {
               id: res.userId,
               role: res.userRole
@@ -44,15 +43,19 @@ export class LoginComponent {
             StorageService.saveToken(res.jwt);
             console.log(StorageService.getUserRole())
             if(StorageService.isStudentLoggedIn()){
+              alert(" student  logged in successfully")
               this.router.navigateByUrl("/student-dashboard")
             } 
             else if(StorageService.isCompanyLoggedIn()){
+              alert(" company  logged in successfully")
               this.router.navigateByUrl("/company-dashboard")
             }
           }
         }),
         error :(err)=>{
-         this.errormessage =err.err
+          console.log(err)
+         this.errormessage =err.error.error
+        
          alert(this.errormessage) 
         }
       })

@@ -1,8 +1,11 @@
 package com.example.internship_app.Entities;
 
 
+import com.example.internship_app.Enums.AccountStatus;
 import com.example.internship_app.Enums.Role;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -17,6 +20,16 @@ public class Company extends User {
  private String description;
  private String companyLogo ;
 
+ @Enumerated(EnumType.STRING)
+ private AccountStatus accountStatus ;
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
 
     public String getCompanyLogo() {
         return companyLogo;

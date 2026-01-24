@@ -33,8 +33,13 @@ export class StorageService {
       if(role?.includes("STUDENT")){
         return "STUDENT"
       }
-      else
+      else if(role?.includes("COMPANY")){
       return "COMPANY"
+      }
+      else if(role?.includes("ADMIN")){
+      return "ADMIN"
+    }
+    return null;
   }
 
   static isAdminLoggedIn():boolean{

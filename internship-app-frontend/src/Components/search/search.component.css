@@ -3,13 +3,12 @@
     gap: 2rem;
     padding: 2rem;
     background: #f9fafb;
-    flex-wrap: wrap;
-   
+
   }
   
 
   .filters {
-    flex: 1;
+    flex:6;
     max-width: 500px;
     background: #fff;
     padding: 1.5rem;
@@ -60,7 +59,9 @@
     background: #1d4ed8;
   }
   
-
+  .offers{
+    width: 60%;
+  }
   
 
   @media (max-width: 992px) {
@@ -83,7 +84,7 @@
 
   .apps-main {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 3fr));
     gap: 2rem;
   }
   
@@ -92,7 +93,6 @@
     border-radius: 12px;
     padding: 1.5rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-    display: flex;
     gap: 1rem;
     margin: 1rem;
     align-items: flex-start;
@@ -152,6 +152,7 @@
   .badge {
     padding: 0.3rem 0.7rem;
     border-radius: 6px;
+    margin: 0.4rem;
     font-size: 0.8rem;
     font-weight: 600;
     text-transform: capitalize;
@@ -240,7 +241,8 @@
   }
 
   .save-btn.clicked{
-    background: #ccddf0;
+    background-color: #ccddf0;
+    cursor: not-allowed;
   }
 
   .btn.secondary {

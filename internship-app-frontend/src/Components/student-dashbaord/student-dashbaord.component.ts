@@ -16,6 +16,7 @@ import { StorageService } from '../../Storage/storage.service';
 export class StudentDashbaordComponent {
   currentstudentid: any
   currentstudent:any
+  currentstudentname:any
   currenstudentdata :any =[]
   listofstudentapplications: any = []
   listofacceptedapplications :any = []
@@ -44,15 +45,20 @@ export class StudentDashbaordComponent {
   }
 
   ngOnInit(){
+    console.log(this.list_of_saved_offers)
     this.currentstudent = StorageService.getUser()
     const json = this.currentstudent;
      const obj = JSON.parse(json);
      this.currentstudentid =obj.id
+     this.currentstudentname=obj.fullName
+     
      console.log(this.currentstudentid)
 
      this.studentService.GetstudentByid(this.currentstudentid).subscribe({
        next:(res=>{
          console.log(res)
+         this.currentstudentname=res.fullName
+         console.log(this.currentstudentname)
          this.currenstudentdata =res
        }),
        error:(err=>{
@@ -160,12 +166,12 @@ export class StudentDashbaordComponent {
     this.studentService.unsaveInternship(this.currentstudentid,postid).subscribe({
       next: (res) => {
         console.log(res);
-        alert('✅ Internship unsaved successfully!');
+        alert(' Internship unsaved successfully!');
         this.displaysavedoffer()
       },
       error: (err) => {
         console.error(err);
-        alert('❌ Failed to unsave internship.');
+        alert(' Failed to unsave internship.');
       }
     });
   }

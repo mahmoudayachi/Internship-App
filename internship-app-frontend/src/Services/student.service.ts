@@ -41,11 +41,12 @@ export class StudentService {
   }
 
   searchInternships(filters: {
+    title?: string;
+    description?:string;
+    location?:string;
+    duration?:string
     status?: string;
     type?: string;
-    location?: string;
-    duration?:string
-    search?: string;
     page?: number;
     size?: number;
     sortBy?: string;

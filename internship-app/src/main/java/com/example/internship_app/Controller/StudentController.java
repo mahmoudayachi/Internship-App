@@ -61,8 +61,8 @@ public class StudentController {
         return ResponseEntity.ok(studentService.ApplytoOffer(application));
     }
 
-    @GetMapping("/profileimage/{filename}")
-    public ResponseEntity<byte[]> getprofileimage(@PathVariable String filename) throws IOException {
+    @GetMapping("/profileimage/{profileimage}")
+    public ResponseEntity<byte[]> getprofileimage(@PathVariable("profileimage") String filename) throws IOException {
         Path imagePath = Paths.get(profileimagedirectory, filename);
         byte[] imageBytes = Files.readAllBytes(imagePath);
         HttpHeaders headers = new HttpHeaders();
@@ -122,7 +122,7 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> GetstudentByid(@PathVariable Long id ){
+    public ResponseEntity<?> GetstudentByid(@PathVariable("id")  Long id ){
         return ResponseEntity.ok(studentService.GetstudentById(id));
     }
     @GetMapping("/application/{id}")
@@ -147,8 +147,9 @@ public class StudentController {
             @RequestParam(required = false) InternshipPostStatus status,
             @RequestParam(required = false) String location,
             @RequestParam(required = false) String duration,
+            @RequestParam(required = false) String description,
             @RequestParam(required = false) InternshipType type,
-            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String title,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
@@ -160,7 +161,7 @@ public class StudentController {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        return internshipPostService.getFilteredInternshipsPaged(status, location ,duration,type, search,pageable);
+        return internshipPostService.getFilteredInternshipsPaged(status, location ,duration,type, title,description,pageable);
     }
     @GetMapping("/search/all")
     public ResponseEntity<?> GetAllInternshippost(){

@@ -5,6 +5,7 @@ import com.example.internship_app.Dto.StudentDTO;
 import com.example.internship_app.Dto.SignupRequest;
 import com.example.internship_app.Entities.Company;
 import com.example.internship_app.Entities.Student;
+import com.example.internship_app.Enums.AccountStatus;
 import com.example.internship_app.Enums.Role;
 import com.example.internship_app.Repositories.AuthService;
 import com.example.internship_app.Repositories.CompanyRepository;
@@ -59,6 +60,7 @@ public class AuthServiceImpl  implements AuthService {
          Student student =  new Student();
          student.setFullName(signupRequest.getFullName());
          student.setRole(Role.STUDENT);
+         student.setAccountStatus(AccountStatus.ACTIVATED);
          student.setCreatedAt(LocalDateTime.now());
          student.setEmail(signupRequest.getEmail());
          student.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
@@ -83,6 +85,7 @@ public class AuthServiceImpl  implements AuthService {
          company.setCreatedAt(LocalDateTime.now());
          company.setEmail(signupRequest.getEmail());
          company.setRole(Role.COMPANY);
+         company.setAccountStatus(AccountStatus.ACTIVATED);
          company.setPassword(new BCryptPasswordEncoder().encode(signupRequest.getPassword()));
          company.setCompanysize(signupRequest.getCompanysize());
          company.setLocation(signupRequest.getLocation());

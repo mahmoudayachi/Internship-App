@@ -586,9 +586,11 @@
 
 
   .apps-main {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:space-between ;
+    align-items: center;
+    gap: 1rem;
   }
   
   .app-card {

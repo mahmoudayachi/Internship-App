@@ -2,6 +2,7 @@ package com.example.internship_app.Dto;
 
 
 import com.example.internship_app.Entities.Company;
+import com.example.internship_app.Enums.AccountStatus;
 import com.example.internship_app.Enums.Role;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +22,15 @@ public class CompanyDTO {
     private String companysize;
     private String description;
     private String companyLogo ;
+    private AccountStatus accountStatus;
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
 
     public Long getId() {
         return id;
@@ -103,6 +113,7 @@ public class CompanyDTO {
         companyDTO.setDescription(company.getDescription());
         companyDTO.setLocation(company.getLocation());
         companyDTO.setRole(company.getRole());
+        companyDTO.setAccountStatus(AccountStatus.ACTIVATED);
         companyDTO.setEmail(company.getEmail());
         companyDTO.setCompanysize(company.getCompanysize());
         companyDTO.setCompanyLogo(company.getCompanyLogo());

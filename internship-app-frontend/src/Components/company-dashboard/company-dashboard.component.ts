@@ -1,15 +1,21 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ShareConfig } from 'rxjs';
 import { CompanyService } from '../../Services/company.service';
 import { StorageService } from '../../Storage/storage.service';
-
+import {MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatButtonModule} from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 @Component({
   selector: 'app-company-dashboard',
   standalone: true,
-  imports: [RouterLink,NgIf,NgFor,ReactiveFormsModule],
+  imports: [RouterLink,NgIf,NgFor,ReactiveFormsModule,MatIconModule,
+    MatChipsModule,MatFormFieldModule,],
   templateUrl: './company-dashboard.component.html',
   styleUrl: './company-dashboard.component.css'
 })
@@ -35,7 +41,8 @@ export class CompanyDashboardComponent {
   Logo :any 
   updateProfileForm: FormGroup;
   logoPreview: string | ArrayBuffer | null = null;
-
+  skillsarray: string[] = [];
+  requirementsarray :string[] =[];
   internshippost !:FormGroup
 
   constructor(private router :Router,private fb: FormBuilder,private companyservice :CompanyService ){
@@ -72,7 +79,7 @@ export class CompanyDashboardComponent {
 
   ngOnInit(){
    
-    
+    this.displaymaindashboard()
     this.currentuser = StorageService.getUser()
     const json = this.currentuser;
      const obj = JSON.parse(json);
@@ -116,8 +123,115 @@ export class CompanyDashboardComponent {
     
   }
 
+  readonly reactiveKeywords = signal(['']);
+  readonly formControl = new FormControl(['']);
+  announcer = inject(LiveAnnouncer);
 
+  removeReactiveKeyword(keyword: string) {
+    this.reactiveKeywords.update(keywords => {
+      const index = keywords.indexOf(keyword);
+      if (index < 0) {
+        return keywords;
+      }
 
+      keywords.splice(index, 1);
+      this.skillsarray.splice(index)
+      console.log(this.skillsarray)
+      this.announcer.announce(`removed ${keyword} from reactive form`);
+    
+      return [...keywords];
+    });
+  }
+   
+ 
+
+  readonly secondreactivekeywords =signal([''])
+  readonly secondformControl = new FormControl(['']);
+  addsecondReactiveKeyword(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    if (value) {
+      this.secondreactivekeywords.update(keywords => [...keywords, value]);
+      this.announcer.announce(`added ${value} to reactive form`);
+      this.requirementsarray.push(value)
+      console.log(this.requirementsarray)
+    }
+    event.chipInput!.clear();
+  }
+  removesecondReactiveKeyword(keyword: string) {
+    this.secondreactivekeywords.update(keywords => {
+      const index = keywords.indexOf(keyword);
+      if (index < 0) {
+        return keywords;
+      }
+
+      keywords.splice(index, 1);
+      this.requirementsarray.splice(index)
+      console.log(this.requirementsarray)
+      this.announcer.announce(`removed ${keyword} from reactive form`);
+    
+      return [...keywords];
+    });
+  }
+   
+  addReactiveKeyword(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    if (value) {
+      this.reactiveKeywords.update(keywords => [...keywords, value]);
+      this.announcer.announce(`added ${value} to reactive form`);
+      this.skillsarray.push(value)
+      console.log(this.skillsarray)
+    }
+    event.chipInput!.clear();
+  }
+ 
+
+  submit(){
+      const data = new FormData()
+      data.append("company_id",this.internshippost.controls["company_id"].value??'')
+     data.append("title",this.internshippost.controls["title"].value??'')
+     console.log(data.getAll("title"))
+     data.append("duration",this.internshippost.controls["duration"].value??'')
+     console.log(data.getAll("duration"))
+     data.append("internshiptype",this.internshippost.controls["internshiptype"].value??'')
+     console.log(data.getAll("internshiptype"))
+     data.append("location",this.internshippost.controls["location"].value??'')
+     console.log(data.getAll("location"))
+     data.append("startDate",this.internshippost.controls["startDate"].value??'')
+     console.log(data.getAll("startDate"))
+     data.append("endDate",this.internshippost.controls["endDate"].value??'')
+     console.log(data.getAll("endDate"))
+     data.append("applydeadline",this.internshippost.controls["applydeadline"].value??'')
+     this.skillsarray.forEach((item)=>{
+      data.append("skills",item)
+     })
+     
+     console.log(data.getAll("skills"))
+     this.requirementsarray.forEach((item)=>{
+       data.append("requirements",item)
+     })
+
+     console.log(data.getAll("requirements"))
+     data.append("description",this.internshippost.controls["description"].value??'')
+      console.log(data)
+     this.companyservice.AddInternshipPost(data).subscribe({
+       next:(res)=>{
+        console.log(res)
+         if(res.company_id!=null){
+           alert("internship post addedd succsessfully")
+          
+         }
+       },
+       error:(err=>{
+         console.log(err)
+       })
+     })
+      }
+      
+      
+    
+  
 
   Submitpost(){
     if(!this.internshippost.valid){
@@ -237,6 +351,7 @@ export class CompanyDashboardComponent {
     this.companyservice.AcceptOffer(id).subscribe({
       next:(res=>{
         alert("offer accepted  ")
+        this.displayReceivedApplicaitons()
        
       }),
       error:(err=>{
@@ -248,6 +363,7 @@ export class CompanyDashboardComponent {
     this.companyservice.RejectOffer(id).subscribe({
       next:(res=>{
         alert("offer Rejected ")
+        this.displayReceivedApplicaitons()
       }),
       error:(err=>{
         console.log(err)

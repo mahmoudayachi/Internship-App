@@ -8,9 +8,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class InternshipPost {
@@ -36,11 +34,26 @@ public class InternshipPost {
     @Enumerated(EnumType.STRING)
     private InternshipType internshiptype ;
 
-    private String requirements ;
+
 
     private LocalDateTime createdAt ;
     @Enumerated(EnumType.STRING)
     private InternshipPostStatus status;
+
+    @ElementCollection
+    @CollectionTable(name = "skills", joinColumns = @JoinColumn(name = "company_id"))
+    @Column(name = "skills")
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
+    private List<String> skills = new ArrayList<>();
+
+
+    @ElementCollection
+    @CollectionTable(name = "requirements", joinColumns = @JoinColumn(name = "company_id"))
+    @Column(name = "requirements")
+    @org.hibernate.annotations.OnDelete(action = org.hibernate.annotations.OnDeleteAction.CASCADE)
+    private List<String> requirements = new ArrayList<>();
+
+
 
     @ManyToOne
     @JoinColumn( name ="company_id")
@@ -49,6 +62,25 @@ public class InternshipPost {
     @ManyToMany(mappedBy = "savedInternships")
     @JsonIgnore
     private Set<Student> savedByStudents = new HashSet<>();
+
+
+    public List<String> getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(List<String> requirements) {
+        this.requirements = requirements;
+    }
+
+
+
+    public List<String> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
 
     public Set<Student> getSavedByStudents() {
         return savedByStudents;
@@ -138,13 +170,7 @@ public class InternshipPost {
         this.internshiptype = internshiptype;
     }
 
-    public String getRequirements() {
-        return requirements;
-    }
 
-    public void setRequirements(String requirements) {
-        this.requirements = requirements;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

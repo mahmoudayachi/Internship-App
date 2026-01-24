@@ -59,7 +59,7 @@ export class SignupComponent {
     },
     error:(err)=>{
       console.log(err);
-      this.errormessage =err
+      this.errormessage =err.error
       alert(this.errormessage)
     }
 
@@ -93,7 +93,7 @@ export class SignupComponent {
 
       },
       error:(err)=>{
-       this.errormessage =err
+       this.errormessage =err.error
        alert(this.errormessage)
       }
     })

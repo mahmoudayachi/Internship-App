@@ -1,6 +1,7 @@
 package com.example.internship_app.Entities;
 
 
+import com.example.internship_app.Enums.AccountStatus;
 import com.example.internship_app.Enums.Role;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,6 +18,8 @@ public class Student extends User{
     private String bio ;
     private String resume ;
     private String  profileimage;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus ;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -25,6 +28,15 @@ public class Student extends User{
             inverseJoinColumns = @JoinColumn(name = "internship_id")
     )
     private Set<InternshipPost> savedInternships = new HashSet<>();
+
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
 
     public Set<InternshipPost> getSavedInternships() {
         return savedInternships;

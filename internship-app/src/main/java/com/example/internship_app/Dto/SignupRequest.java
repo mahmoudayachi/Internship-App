@@ -1,5 +1,6 @@
 package com.example.internship_app.Dto;
 
+import com.example.internship_app.Enums.AccountStatus;
 import com.example.internship_app.Enums.Role;
 import lombok.Data;
 
@@ -19,7 +20,15 @@ public class SignupRequest {
     private String companysize;
     private String description;
     private String companyLogo ;
+    private AccountStatus accountStatus;
 
+    public AccountStatus getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
 
     public String getFullName() {
         return fullName;

@@ -16,12 +16,13 @@ export class SearchComponent {
   array_of_savedpost_id:any =[]
   totalElements = 0;
   page = 0;
-  size = 2;
+  size = 10;
   status = '';
   type = '';
   duration='';
   location = '';
-  search = '';
+  title = '';
+  description ='';
   currentstudent:any
   currentstudentid:any
   responsearray :any =[]
@@ -31,11 +32,12 @@ export class SearchComponent {
   }
   loadInternships(): void {
     this.studentservice.searchInternships({
+      title: this.title.toLowerCase(),
+      description:this.description,
+      location: this.location.toLowerCase(),
+      duration:this.duration,
       status: this.status,
       type: this.type,
-      location: this.location,
-      duration:this.duration,
-      search: this.search,
       page: this.page,
       size: this.size,
       sortBy: 'createdAt',
@@ -69,7 +71,7 @@ export class SearchComponent {
   }
 
   onsearchChange(event:any){
-    this.search = event.target.value
+    this.title = event.target.value
     this.loadInternships()
    }
 
@@ -111,28 +113,40 @@ export class SearchComponent {
     
 
   }
+  disablebtn(postid:any){
+    const alreadySaved = this.list_of_saved_post.some(
+      (post: { id: any; }) => post.id === postid
+    );
+    if (alreadySaved) {
+      const savebtn =document.querySelector(".save-btn");
+      savebtn?.classList.toggle("clicked")
+      return true
+    }
+    return false
+  }
 
   savepost(postid:any ){
     const alreadySaved = this.list_of_saved_post.some(
       (post: { id: any; }) => post.id === postid
     );
-  
     if (alreadySaved) {
-      alert('⚠️ You already saved this internship!'); 
+      alert(' You already saved this internship!'); 
+     
       return;
     }
   
     else{
     this.studentservice.saveInternship(this.currentstudentid,postid).subscribe({
       next:(res)=>{
-        
         const isSaved = res.some((post: { id: any; }) => post.id === postid);
         
         if (isSaved) {
-          alert('✅ Internship saved successfully!');
+          alert(' Internship saved successfully!');
+           const savebtn =document.querySelector(".save-btn");
+           savebtn?.classList.toggle("clicked")
        
         } else {
-          alert('✅ problem could not save internship offer !');
+          alert(' problem could not save internship offer !');
         }
       },
       error:(err=>{

@@ -29,13 +29,14 @@ public class InternshipPostService {
 
     public InternshipPostDto getinternshippostdto(InternshipPost post){
         InternshipPostDto postdto = new InternshipPostDto();
-        postdto.setId(post.getId());
+        postdto.setCompany_id(post.getId());
         postdto.setTitle(post.getTitle());
         postdto.setDescription(post.getDescription());
         postdto.setLocation(post.getLocation());
         postdto.setCompany_id(post.getCompany().getId());
         postdto.setCreatedAt(post.getCreatedAt());
         postdto.setRequirements(post.getRequirements());
+        postdto.setSkills(post.getSkills());
         postdto.setStatus(post.getStatus());
         postdto.setDuration(post.getDuration());
         postdto.setApplydeadline(post.getApplydeadline());
@@ -62,15 +63,16 @@ public class InternshipPostService {
          internshipPost.setStatus(InternshipPostStatus.AVAILABLE);
          internshipPost.setInternshiptype(post.getInternshiptype());
          internshipPost.setRequirements(post.getRequirements());
+         internshipPost.setSkills(post.getSkills());
         InternshipPost createdpost = internshipPostRepository.save(internshipPost);
          return getinternshippostdto(createdpost);
     }
 
-    public void deletePost(Long id ){
-     if(!internshipPostRepository.existsById(id)){
-         throw new EntityNotFoundException("internshipPost not found");
-     }
-      internshipPostRepository.deleteById(id);
+    public void deletePost(Long id) {
+        InternshipPost post = internshipPostRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Internship post not found"));
+
+        internshipPostRepository.delete(post);
     }
 
     public InternshipPostDto UpdateInternshipPost(InternshipPost post, Long id){
@@ -87,14 +89,13 @@ public class InternshipPostService {
     }
 
 
-    public Page<InternshipPost> getFilteredInternshipsPaged(InternshipPostStatus status, String location,String duration, InternshipType type,String search,Pageable pageable) {
-        if (search != null && search.isBlank()) search = null;
+    public Page<InternshipPost> getFilteredInternshipsPaged(InternshipPostStatus status, String location,String duration, InternshipType type,String title,String description,Pageable pageable) {
         if (location != null && location.isBlank()) location = null;
         if (duration != null && duration.isBlank()) duration = null;
         if (status != null && status.toString().equalsIgnoreCase("All")) status = null;
         if (type != null && type.toString().equalsIgnoreCase("All")) type = null;
 
-        return internshipPostRepository.searchAndFilter(status, location,duration,type,search,pageable);
+        return internshipPostRepository.searchInternships(title, description,location,duration,status,type,pageable);
     }
 
     public List<InternshipPost> GetAllInternshipPosts(){

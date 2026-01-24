@@ -1,0 +1,21 @@
+
+<body>
+    <form [formGroup]="loginform" >
+      <div class="login-container">
+        <div class="login-card">
+    
+            <h2>Admin portal</h2>
+                <label>Email</label>
+                <input formControlName="email"  type="email" placeholder="Enter your email">
+                 
+                <label>Password</label>
+                <input formControlName="password" type="password" placeholder="Enter your password">
+    
+                <button (click)="adminlogin()" type="submit" class="login-btn">Login</button>
+          
+        </div>
+    </div>
+    </form>  
+    </body>
+    
+    

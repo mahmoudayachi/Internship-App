@@ -2,7 +2,7 @@ import { Component, Inject } from '@angular/core';
 import {ChangeDetectionStrategy, inject} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog, MatDialogModule, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { ActivatedRoute, RouterLinkActive } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkActive } from '@angular/router';
 import { StudentService } from '../../Services/student.service';
 import { StorageService } from '../../Storage/storage.service';
 @Component({
@@ -18,10 +18,11 @@ export class ApplyDialogComponent {
   studentid: any
   internshippostid :any
   currentstudent:any
-  constructor(private route: ActivatedRoute,private studentservice :StudentService, @Inject(MAT_DIALOG_DATA) public data :any){
+  constructor(private router: Router,private route: ActivatedRoute,private studentservice :StudentService, @Inject(MAT_DIALOG_DATA) public data :any){
 
   }
    ngOnInit(){
+   
     this.internshippostid = this.data.postId;
     console.log(this.internshippostid)
     this.currentstudent = StorageService.getUser()
@@ -29,6 +30,7 @@ export class ApplyDialogComponent {
      const obj = JSON.parse(json);
      this.studentid =obj.id
      console.log(this.studentid)
+    
    }
 
   onCvSelected(event: any): void {

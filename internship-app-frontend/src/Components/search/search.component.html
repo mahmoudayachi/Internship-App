@@ -24,7 +24,7 @@
           <option value="">Any</option>
           <option value="1">1 Month</option>
           <option value="3">3 Months</option>
-          <option value="6">6+ Months</option>
+          <option value="6">6 Months</option>
         </select>
       </div>
 
@@ -68,13 +68,12 @@
             <div class="meta-block">
               <span *ngIf="offer.status=='AVAILABLE'" class="status badge available">{{offer.status}}</span>
               <span *ngIf="offer.status=='EXPIRED'" class="status badge expired">{{offer.status}}</span>
+              <span *ngIf="offer.status=='AVAILABLE'" class="status badge available ">{{offer.internshiptype}}</span>
             </div>
           </div>
   
           <p class="short-desc">
             {{offer.description}}
-            Développement d’interfaces web réactives avec Angular. Participation aux revues de
-            conception UI/UX.
           </p>
   
           <div class="app-footer">
@@ -91,7 +90,7 @@
             </div>
             <div class="actions">
               <button (click)="viewofferdetails(offer.id)"  class="btn secondary">view</button>
-              <button (click)="savepost(offer.id)" id="save"  class="save-btn" >save</button>
+              <button (click)="savepost(offer.id)" id="save" [disabled]="disablebtn(offer.id)"  class="save-btn" >save</button>
             </div>
           </div>
           

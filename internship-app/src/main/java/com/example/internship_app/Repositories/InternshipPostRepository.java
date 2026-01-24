@@ -19,22 +19,21 @@ public interface InternshipPostRepository extends JpaRepository<InternshipPost,L
     List<InternshipPost>  findByCompanyId(Long companyId);
 
 
-    @Query("""
-    SELECT i FROM InternshipPost i
-    WHERE (:status IS NULL OR i.status = :status)
-      AND (:type IS NULL OR i.internshiptype = :type)
-      AND (:location IS NULL OR LOWER(i.location) LIKE LOWER(CONCAT('%', :location, '%')))
-      AND (:duration IS NULL OR LOWER(i.duration) LIKE LOWER(CONCAT('%', :duration, '%')))
-      AND (:search IS NULL OR LOWER(i.title) LIKE LOWER(CONCAT('%', :search, '%'))
-          OR LOWER(i.description) LIKE LOWER(CONCAT('%', :search, '%'))
-      )
-""")
-    Page<InternshipPost> searchAndFilter(
-            @Param("status") InternshipPostStatus status,
+    @Query(" SELECT i FROM InternshipPost i  "+
+            " WHERE i.title  LIKE  %:title%  " +
+            "OR i.description LIKE %:description% "+
+            " OR i.location LIKE  %:location% "+
+            "OR i.duration LIKE %:duration%  " +
+            "OR i.status = :status "+
+            "OR i.internshiptype = :type"
+)
+    Page<InternshipPost> searchInternships(
+            @Param("title") String title,
+            @Param("description") String description,
             @Param("location") String location,
             @Param("duration") String duration,
+            @Param("status") InternshipPostStatus status,
             @Param("type") InternshipType type,
-            @Param("search") String search,
             Pageable pageable
     );
 }

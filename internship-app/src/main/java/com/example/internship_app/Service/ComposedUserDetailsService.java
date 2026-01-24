@@ -19,6 +19,9 @@ public class ComposedUserDetailsService implements UserDetailsService {
     @Autowired
     private   CompanyUserDetailsService companyUserDetailsService;
 
+    @Autowired
+    private   AdminUserDetailsService adminUserDetailsService;
+
     private List<UserDetailsService> services;
 
     @PostConstruct
@@ -26,6 +29,7 @@ public class ComposedUserDetailsService implements UserDetailsService {
         List<UserDetailsService> new_services = new ArrayList<>();
         new_services.add(this.jobseekerUserDetailsService);
         new_services.add(this.companyUserDetailsService);
+        new_services.add(this.adminUserDetailsService);
         this.services = new_services;
     }
 

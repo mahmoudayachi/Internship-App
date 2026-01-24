@@ -36,7 +36,7 @@ public class CompanyController {
     private InternshipPostRepository internshipPostRepository;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> GetcompanyByid( @PathVariable Long id ){
+    public ResponseEntity<?> GetcompanyByid( @PathVariable("id") Long id ){
         return ResponseEntity.ok(companyService.GetcompanyById(id));
 
     }
@@ -52,8 +52,8 @@ public class CompanyController {
     }
 
 
-    @GetMapping("/Logo/{filename}")
-    public ResponseEntity<byte[]> getcompanyLogo(@PathVariable String filename) throws IOException {
+    @GetMapping("/Logo/{companyLogo}")
+    public ResponseEntity<byte[]> getcompanyLogo(@PathVariable("companyLogo") String filename) throws IOException {
         Path imagePath = Paths.get(logodirectory, filename);
         byte[] imageBytes = Files.readAllBytes(imagePath);
         HttpHeaders headers = new HttpHeaders();
@@ -79,13 +79,13 @@ public class CompanyController {
     }
 
     @PutMapping("/updateprofile/{id}")
-    public  ResponseEntity<CompanyDTO> updateprofile(@PathVariable Long id , @ModelAttribute Company company, MultipartFile logo) throws IOException {
+    public  ResponseEntity<CompanyDTO> updateprofile(@PathVariable("id") Long id , @ModelAttribute Company company, MultipartFile logo) throws IOException {
         return ResponseEntity.ok(companyService.Updateprofile(id,company,logo));
 
     }
 
     @PostMapping("/create")
-    public ResponseEntity<InternshipPostDto>  createInternshipPost(@RequestBody InternshipPostDto post){
+    public ResponseEntity<InternshipPostDto>  createInternshipPost(@ModelAttribute InternshipPostDto post){
         if(post == null){
             throw new RuntimeException("post is empty");
         }
@@ -93,17 +93,13 @@ public class CompanyController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteInternshipPost(@PathVariable Long id ){
+    public ResponseEntity<String> deleteInternshipPost(@PathVariable Long id) {
         internshipPostService.deletePost(id);
-        if(internshipPostRepository.existsById(id)){
-            String error = "ERROR post was not deleted";
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error);
-        }
-        return ResponseEntity.ok("post deleted succssfully");
+        return ResponseEntity.ok("Post deleted successfully");
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateInternshipPost( @RequestBody InternshipPost post ,@PathVariable Long id ){
+    public ResponseEntity<?> updateInternshipPost( @RequestBody InternshipPost post , Long id ){
         return ResponseEntity.ok(internshipPostService.UpdateInternshipPost(post,id));
 
     }

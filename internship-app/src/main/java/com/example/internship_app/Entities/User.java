@@ -24,6 +24,7 @@ public  abstract class User implements UserDetails {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
     @Enumerated(EnumType.STRING)
     private Role role ;
 

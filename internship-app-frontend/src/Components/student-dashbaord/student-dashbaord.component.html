@@ -16,10 +16,10 @@
     <div class="main-content" *ngIf="displaydashboard" >
      
       <header class="topbar">
-        <h2>Welcome, <span class="username">Mahmoud</span></h2>
+        <h2>Welcome, <span class="username">{{currentstudentname}}</span></h2>
         <div class="actions">
           <i class="fa-solid fa-bell"></i>
-          <img src="http://localhost:8080/student/profileimage/{{currenstudentdata.profileimage}}" alt="profile" class="profile-img" />
+          <img  src="http://localhost:8080/student/profileimage/{{currenstudentdata.profileimage}}" alt="profile" class="profile-img" />
         </div>
       </header>
   
@@ -105,6 +105,7 @@
                 <span class="applied-date">Applied:{{application.applicationDate}}</span>
                 <span *ngIf="application.status=='ACCEPTED'" class="status badge accepted">{{application.status}}</span>
                 <span *ngIf="application.status=='REJECTED'" class="status badge rejected">{{application.status}}</span>
+                <span *ngIf="application.status=='PENDING'" class="status badge pending">{{application.status}}</span>
               </div>
             </div>
     

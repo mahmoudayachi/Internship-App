@@ -9,10 +9,11 @@ import jakarta.persistence.Enumerated;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class InternshipPostDto {
 
-    private Long id;
+    private Long company_id;
 
     private String title;
 
@@ -30,13 +31,32 @@ public class InternshipPostDto {
 
     private InternshipType internshiptype;
 
-    private String requirements;
+    private List<String> requirements;
+
+    private List<String> skills;
 
     private LocalDateTime createdAt;
 
     private InternshipPostStatus status;
 
-    private Long company_id;
+
+
+
+    public List<String> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<String> skills) {
+        this.skills = skills;
+    }
+
+    public List<String> getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(List<String> requirements) {
+        this.requirements = requirements;
+    }
 
     public LocalDate getApplydeadline() {
         return applydeadline;
@@ -54,13 +74,7 @@ public class InternshipPostDto {
         this.company_id = company_id;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -118,13 +132,7 @@ public class InternshipPostDto {
         this.internshiptype = internshiptype;
     }
 
-    public String getRequirements() {
-        return requirements;
-    }
 
-    public void setRequirements(String requirements) {
-        this.requirements = requirements;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
