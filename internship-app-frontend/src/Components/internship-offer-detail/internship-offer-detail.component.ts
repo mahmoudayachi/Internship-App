@@ -18,8 +18,9 @@ import { ApplyDialogComponent } from '../apply-dialog/apply-dialog.component';
 export class InternshipOfferDetailComponent {
   InternshipPostdetails :any =[]
   postid :any 
-
-
+  list_of_requirements :any =[]
+  list_of_technoloiges:any=[]
+ 
   readonly dialog = inject(MatDialog);
 
   openDialog() {
@@ -49,6 +50,9 @@ export class InternshipOfferDetailComponent {
     this.studentService.GetInternshipPostById(this.postid).subscribe({
       next:(res=>{
         this.InternshipPostdetails =res
+        this.list_of_requirements=res.requirements
+        this.list_of_technoloiges=res.skills
+        console.log(this.list_of_technoloiges)
         console.log(this.InternshipPostdetails)
       }),
       error:(err=>{

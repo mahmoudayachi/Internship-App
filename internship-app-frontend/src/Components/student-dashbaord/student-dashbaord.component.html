@@ -19,7 +19,8 @@
         <h2>Welcome, <span class="username">{{currentstudentname}}</span></h2>
         <div class="actions">
           <i class="fa-solid fa-bell"></i>
-          <img  src="http://localhost:8080/student/profileimage/{{currenstudentdata.profileimage}}" alt="profile" class="profile-img" />
+          <img *ngIf="!display_placeholder_image"  src="http://localhost:8080/student/profileimage/{{currenstudentdata.profileimage}}" alt="profile" class="profile-img" />
+          <img *ngIf="display_placeholder_image" class="profile-img"  src="assets/images/profileimage.jpg" alt="image">
         </div>
       </header>
   
@@ -118,9 +119,9 @@
                 <span class="info">Location: {{application.internshipOffer.location}}</span>
                 <span class="info">Duration: {{application.internshipOffer.duration}} months</span>
                 <div class="techs">
-                  <span class="tech">Angular</span>
-                  <span class="tech">TypeScript</span>
-                  <span class="tech">HTML/CSS</span>
+                  @for(skill of application.internshipOffer.skills;track skill){
+                  <span class="tech">{{skill}}</span>
+                }
                 </div>
               </div>
               
@@ -136,7 +137,7 @@
               </button>
               <button>
                <a
-                href="http://localhost:8080/student/pdf/{{application.motivationLetter}}"
+                href="http://localhost:8080/student/letter/{{application.motivationLetter}}"
                 type="application/pdf"
                 target="_blank"
                 class="view-btn"
@@ -182,8 +183,8 @@
         </div>
         
         <div class="form-group">
-          <label for="email"> new password</label>
-          <input formControlName="password"  type="email" id="email"  name="email" required>
+          <label for="password"> new password</label>
+          <input formControlName="password"  type="password" id="email"  name="email" required>
         </div>
     
         <div class="form-group">
@@ -197,14 +198,14 @@
         </div>
     
         <div class="form-actions">
-          <button type="submit" (click)=" onSubmit()" mat-flat-button color="primary">update</button>
+          <button type="submit" (click)=" onSubmit()" >update</button>
         
         </div>
       </form>
     </div>
     
     
-    <section class="offers" *ngIf="displaysavedoffers">
+    <section class="offers-container" *ngIf="displaysavedoffers">
       @for(offer of list_of_saved_offers ; track offer.id){
        <div class="app-card">
          <img class="company-logo" src="http://localhost:8080/company/Logo/{{offer.company.companyLogo}}" alt="VERMEG logo" />
@@ -224,8 +225,6 @@
    
            <p class="short-desc">
              {{offer.description}}
-             Développement d’interfaces web réactives avec Angular. Participation aux revues de
-             conception UI/UX.
            </p>
    
            <div class="app-footer">
@@ -233,16 +232,15 @@
                <span class="info">Location: {{offer.location}}</span>
                <span class="info">Duration: {{offer.duration}} months</span>
                <div class="techs">
-                 <span class="tech">Angular</span>
-                 <span class="tech">TypeScript</span>
-                 <span class="tech">HTML/CSS</span>
-                
+                 @for(skill of offer.skills;track skill){
+                 <span class="tech">{{skill}}</span>
+                }
                </div>
               
              </div>
              <div class="actions">
               
-               <button   class="btn secondary" (click)="deletesavedoffer(offer.id)">unsave</button>
+               <button class="btn secondary" (click)="deletesavedoffer(offer.id)">unsave</button>
              </div>
            </div>
            
@@ -256,6 +254,22 @@
      </section>
 
   </div>
+  <ng-template #successDialog let-data>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions >
+      <button mat-button mat-dialog-close color="primary">OK</button>
+    </mat-dialog-actions>
+  </ng-template>
 
-
-  
+  <ng-template #errorDialog let-data>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions >
+      <button mat-button mat-dialog-close color="primary">OK</button>
+    </mat-dialog-actions>
+  </ng-template>

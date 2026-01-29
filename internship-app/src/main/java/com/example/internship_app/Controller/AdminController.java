@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/Admin")
 public class AdminController {
@@ -26,41 +28,30 @@ public class AdminController {
 
 
     @GetMapping("/all/students")
-    public Page<Student> getInterns(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        return adminService.getAllStudents(pageable);
+    public List<Student> getInterns() {
+        return adminService.getAllStudents();
     }
     @GetMapping("/all/companies")
-    public Page<Company> getAllcompanies(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        return adminService.getAllCompany(pageable);
+    public List<Company> getAllcompanies() {
+        return adminService.getAllCompany();
     }
 
     @GetMapping("/all/internshipposts")
-    public Page<InternshipPost> getAllinternshippost(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        return adminService.getAllInternshipPosts(pageable);
+    public List<InternshipPost> getAllinternshippost() {
+
+        return adminService.getAllInternshipPosts();
     }
 
      @PutMapping("update/status/{id}/{accountStatus}")
      public ResponseEntity<?> updatestudentaccounstatus(@PathVariable("id") Long id , @PathVariable("accountStatus") AccountStatus status) {
-         adminService.changeStudentAccountStatus(id,status);
-        return ResponseEntity.ok().body("account status changed successfully ");
+
+        return ResponseEntity.ok(adminService.changeStudentAccountStatus(id,status));
      }
 
     @PutMapping("update/company/status/{id}/{accountStatus}")
     public ResponseEntity<?> updatecompanyaccounstatus(@PathVariable("id") Long id , @PathVariable("accountStatus") AccountStatus status) {
-        adminService.changeCompanyAccountStatus(id,status);
-        return ResponseEntity.ok().body("account status changed successfully ");
+
+        return ResponseEntity.ok().body(adminService.changeCompanyAccountStatus(id,status));
     }
 
 }

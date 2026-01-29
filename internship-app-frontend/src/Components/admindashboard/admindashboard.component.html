@@ -108,7 +108,6 @@
               </td>
               <td>{{s.createdAt}}</td>
               <td data-label="Actions">
-                <button class="view">View</button>
                 <button class="delete">Delete</button>
               </td>
             </tr>
@@ -116,20 +115,8 @@
         </table>
       </div>
     
-      
-      <div class="pagination">
-        <button (click)="prevPage()" [disabled]="currentPage === 0">
-          Previous
-        </button>
-    
-        <span>Page {{ currentPage + 1 }} / {{ totalPages }}</span>
-    
-        <button (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
-          Next
-        </button>
       </div>
-    
-    </div>
+      
 
     <div class="table-container" *ngIf="company_management_displayed">
 
@@ -148,18 +135,18 @@
           </thead>
     
           <tbody>
-            <tr *ngFor="let s of list_of_companies">
-              <td><img src="http://localhost:8080/company/Logo/{{s.companyLogo}}"></td>
-              <td data-label="Name">{{ s.fullName }}</td>
-              <td data-label="Email">{{ s.email }}</td>
+            <tr *ngFor="let x of list_of_companies">
+              <td><img src="http://localhost:8080/company/Logo/{{x.companyLogo}}"></td>
+              <td data-label="Name">{{ x.fullName }}</td>
+              <td data-label="Email">{{ x.email }}</td>
               <td>
-                <select  [ngClass]="s.accountStatus === 'DESACTIVATED' ? 'select-desactivated' : 'select-activated'"  (change)="updateCompanyAccountstatus($event,s.id )">
-                <option   value={{s.accountStatus}}>{{s.accountStatus}}</option>
-                <option  [value]="s.accountStatus ==='ACTIVATED'?'DESACTIVATED':'ACTIVATED'" > {{ s.accountStatus === 'ACTIVATED' ? 'DESACTIVATED' : 'ACTIVATED' }}</option>
+                <select  [ngClass]="x.accountStatus === 'DESACTIVATED' ? 'select-desactivated' : 'select-activated'"  (change)="updateCompanyAccountstatus($event,x.id )">
+                <option   value={{x.accountStatus}}>{{x.accountStatus}}</option>
+                <option  [value]="x.accountStatus ==='ACTIVATED'?'DESACTIVATED':'ACTIVATED'" > {{ x.accountStatus === 'ACTIVATED' ? 'DESACTIVATED' : 'ACTIVATED' }}</option>
                 </select>
               </td>
               <td data-label="Actions">
-                <button class="view">View</button>
+            
                 <button class="delete">Delete</button>
               </td>
             </tr>
@@ -185,4 +172,12 @@
   </div>
 
 
- 
+  <ng-template #successDialog let-data>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions >
+      <button mat-button mat-dialog-close color="primary">OK</button>
+    </mat-dialog-actions>
+  </ng-template>

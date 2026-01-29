@@ -3,6 +3,7 @@ import {ChangeDetectionStrategy, inject} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatDialog, MatDialogModule, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { ActivatedRoute, Router, RouterLinkActive } from '@angular/router';
+import { SharedstateService } from '../../Services/sharedstate.service';
 import { StudentService } from '../../Services/student.service';
 import { StorageService } from '../../Storage/storage.service';
 @Component({
@@ -18,7 +19,7 @@ export class ApplyDialogComponent {
   studentid: any
   internshippostid :any
   currentstudent:any
-  constructor(private router: Router,private route: ActivatedRoute,private studentservice :StudentService, @Inject(MAT_DIALOG_DATA) public data :any){
+  constructor(private router: Router,private route: ActivatedRoute,private studentservice :StudentService, @Inject(MAT_DIALOG_DATA) public data :any,private appState: SharedstateService){
 
   }
    ngOnInit(){
@@ -60,9 +61,11 @@ export class ApplyDialogComponent {
         console.log(res)
         if(res.id!=null){
           alert("application send successfully")
+          this.appState.notifyChange(); 
         }
       }),
       error:(err=>{
+        alert("you have already applied to this internship")
         console.log(err)
       })
     })

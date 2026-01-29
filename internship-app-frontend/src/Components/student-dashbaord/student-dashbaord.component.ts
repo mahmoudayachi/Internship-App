@@ -1,15 +1,17 @@
 import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconButton } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { RefreshService } from '../../Services/refresh.service';
 import { StudentService } from '../../Services/student.service';
 import { StorageService } from '../../Storage/storage.service';
-
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { SharedstateService } from '../../Services/sharedstate.service';
 @Component({
   selector: 'app-student-dashbaord',
   standalone: true,
-  imports: [NgIf,ReactiveFormsModule,MatIconButton],
+  imports: [NgIf,ReactiveFormsModule,MatIconButton,MatDialogModule],
   templateUrl: './student-dashbaord.component.html',
   styleUrl: './student-dashbaord.component.css'
 })
@@ -28,12 +30,12 @@ export class StudentDashbaordComponent {
   displaysavedoffers =false
  updateprofile =false
   selectedFile: File | null = null;
-  
+  display_placeholder_image :boolean =false
   updateprofileform !: FormGroup
   numberofAcceptedApplications : number = 0
-
-
-  constructor(private studentService :StudentService , private fb: FormBuilder,private router :Router){
+  @ViewChild('successDialog') successDialog!: TemplateRef<any>;
+  @ViewChild('errorDialog') errorDialog!: TemplateRef<any>;
+  constructor(private studentService :StudentService , private fb: FormBuilder,private router :Router,private refreshService: RefreshService ,private dialog: MatDialog,private appState: SharedstateService ){
    this.updateprofileform = this.fb.group({
      fullName :['',Validators.required],
      email:['',Validators.required],
@@ -43,48 +45,76 @@ export class StudentDashbaordComponent {
    
    })
   }
+  
+  showSuccessDialog(title: string, message: string) {
+    this.dialog.open(this.successDialog, {
+      data: { title, message }
+    });
+  }
 
+  showerrorDialog(title:string,message:string){
+    this.dialog.open(this.errorDialog,{
+      data:{title,message}
+    })
+  }
+  
   ngOnInit(){
-    console.log(this.list_of_saved_offers)
-    this.currentstudent = StorageService.getUser()
-    const json = this.currentstudent;
-     const obj = JSON.parse(json);
-     this.currentstudentid =obj.id
-     this.currentstudentname=obj.fullName
+    this.displaydashboards()
+    this.currentstudent = StorageService.getUser();
+    const obj = JSON.parse(this.currentstudent);
+    this.currentstudentid = obj.id;
+     this.currentstudentname = obj.fullName;
+     this.loadAllData(); 
+
+    
+  
+  this.refreshService.refresh$.subscribe(() => {
+    this.loadAllData(); 
+  });
      
-     console.log(this.currentstudentid)
+    
 
-     this.studentService.GetstudentByid(this.currentstudentid).subscribe({
-       next:(res=>{
-         console.log(res)
-         this.currentstudentname=res.fullName
-         console.log(this.currentstudentname)
-         this.currenstudentdata =res
-       }),
-       error:(err=>{
-         console.log(err)
-       })
-     })
+  }
 
-     this.studentService.GetApplicationBystudent(this.currentstudentid).subscribe({
-       next:(res=>{
-         console.log(res)
-         this.listofstudentapplications =res
-         this.numberofapplications =this.listofstudentapplications.length
-       }),
-       error:(err=>{
-         console.log(err)
-       })
-     })
-     this.studentService.GetAcceptedApplications(this.currentstudentid).subscribe({
-       next:(res=>{
-         this.listofacceptedapplications =res
-         this.numberofAcceptedApplications =   this.listofacceptedapplications.length
-         console.log(this.listofacceptedapplications)
-       })
-     })
-
-
+  loadAllData() {
+    
+    this.studentService.GetstudentByid(this.currentstudentid).subscribe({
+      next: (res) => {
+        this.currenstudentdata = res;
+        this.currentstudentname = res.fullName;
+        this.display_placeholder_image = !res.profileimage;
+        this.updateprofileform.get("fullName")?.setValue(res.fullName);
+        this.updateprofileform.get("email")?.setValue(res.email);
+      },
+      error: (err) => console.log(err)
+    });
+  
+    
+    this.studentService.GetApplicationBystudent(this.currentstudentid).subscribe({
+      next: (res) => { 
+    
+        this.listofstudentapplications = res;
+        this.numberofapplications = res.length;
+      },
+      error: (err) => console.log(err)
+    });
+  
+    
+    this.studentService.GetAcceptedApplications(this.currentstudentid).subscribe({
+      next: (res) => {
+        this.listofacceptedapplications = res;
+        this.numberofAcceptedApplications = res.length;
+      }
+    });
+  
+    
+    this.studentService.getSavedInternships(this.currentstudentid).subscribe({
+      next: (res) => {
+        this.list_of_saved_offers = res;
+        this.number_of_saved_offers = res.length;
+      },
+      error: (err) => console.log(err)
+    });
   }
 
   onFileSelected(event: any) {
@@ -96,19 +126,22 @@ export class StudentDashbaordComponent {
 
   
   onSubmit() {  
+   
+   
     const formdata = new FormData()
     formdata.append("fullName",this.updateprofileform.value.fullName)
     formdata.append("email",this.updateprofileform.value.email)
     formdata.append("password",this.updateprofileform.value.password)
     formdata.append("bio",this.updateprofileform.value.bio)
     formdata.append("image",this.updateprofileform.value.image)
-
+    
     console.log(formdata.get("image"))
 
     this.studentService.updatestudentprofile(this.currentstudentid,formdata).subscribe({
       next:(res=>{
         if(res.id!=null){
-          alert("profile updated successfully ")
+          this.showSuccessDialog('Success !', ' profile updated  successfully!')
+          this.refreshService.trigger();
         }
         console.log(res)
       }),
@@ -117,6 +150,7 @@ export class StudentDashbaordComponent {
       })
     })
   }
+  
 
   displaydashboards(){
     this.displaydashboard = true
@@ -130,6 +164,7 @@ export class StudentDashbaordComponent {
   }
   
   displayapplication(){
+  this.refreshService.trigger(); 
    this.displayapplications = true
    this.displaydashboard = false
    this.updateprofile = false
@@ -153,7 +188,10 @@ export class StudentDashbaordComponent {
     this.displaysavedoffers =true
     this.studentService.getSavedInternships(this.currentstudentid).subscribe({
       next:(res=>{
+        this.refreshService.trigger(); 
         this.list_of_saved_offers =res
+        this.number_of_saved_offers = this.list_of_saved_offers.length
+        
         console.log(this.list_of_saved_offers)
       }),
       error:(err=>{
@@ -166,12 +204,12 @@ export class StudentDashbaordComponent {
     this.studentService.unsaveInternship(this.currentstudentid,postid).subscribe({
       next: (res) => {
         console.log(res);
-        alert(' Internship unsaved successfully!');
-        this.displaysavedoffer()
+        this.showSuccessDialog('Success !', 'Internship unsaved successfully!')
+        this.refreshService.trigger(); 
       },
       error: (err) => {
         console.error(err);
-        alert(' Failed to unsave internship.');
+        this.showerrorDialog("error!",'Failed to unsave internship')
       }
     });
   }

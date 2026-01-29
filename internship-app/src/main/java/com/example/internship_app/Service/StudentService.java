@@ -52,6 +52,12 @@ public class StudentService {
     public ApplicationDTO ApplytoOffer(ApplicationDTO application) throws IOException {
         Student student = studentRepository.findById(application.getStudent_id()).orElseThrow(()-> new RuntimeException("student doesn't exist "));
         InternshipPost offer = internshipPostRepository.findById(application.getInternship_offer_id()).orElseThrow(()->new RuntimeException("post doesn't exist "));
+        boolean alreadyApplied =
+                applicationRepository.existsByStudent_IdAndInternshipOffer_Id(student.getId(),offer.getId());
+
+        if (alreadyApplied) {
+            throw new IllegalStateException("You have already applied to this internship");
+        }
 
         Application newapplication = new Application();
         newapplication.setStatus(ApplicationStatus.PENDING);
@@ -65,20 +71,22 @@ public class StudentService {
 
     }
 
-    public StudentDTO Updateprofile(Long  studentid , Student student, MultipartFile logo) throws IOException {
+    public StudentDTO Updateprofile(Long  studentid , Student student, MultipartFile profileimage) throws IOException {
         Student existingstudent = studentRepository.findById(studentid).orElseThrow(()->new RuntimeException("student doesn't exist"));
 
         existingstudent.setBio(student.getBio());
         existingstudent.setResume(student.getResume());
         existingstudent.setEmail(student.getEmail());
-        if(student.getPassword()!=null) {
+        if (student.getPassword() != null && !student.getPassword().isBlank()) {
             existingstudent.setPassword(new BCryptPasswordEncoder().encode(student.getPassword()));
         }
         existingstudent.setFullName(student.getFullName());
-        String originalprofileimagename = logo.getOriginalFilename();
-        Path filenameandpath = Paths.get(profileimagedirectory,originalprofileimagename);
-        Files.write(filenameandpath,logo.getBytes());
-        existingstudent.setProfileimage(originalprofileimagename);
+        if(profileimage!=null) {
+            String originalprofileimagename = profileimage.getOriginalFilename();
+            Path filenameandpath = Paths.get(profileimagedirectory, originalprofileimagename);
+            Files.write(filenameandpath, profileimage.getBytes());
+            existingstudent.setProfileimage(originalprofileimagename);
+        }
         Student updatestudent = studentRepository.save(existingstudent);
        StudentDTO studentDTO = new StudentDTO();
         return studentDTO.getstudentdto(updatestudent);

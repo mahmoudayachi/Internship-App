@@ -9,7 +9,7 @@
 <body>
   <div class="homepage">
     <header class="navbar">
-      <div class="logo">InternConnect</div>
+      <div class="logo">IntenrshiApp</div>
       
       <div class="menu-icon" id="menu-icon" onclick="toggleMenu()">
         <div></div>
@@ -19,10 +19,9 @@
       <nav>
         <a href="#">Home</a>
         <a href="/search">Internships</a>
-        <a href="#">Companies</a>
+        <a href="#companies">Companies</a>
         <a href="#">About</a>
         <a href="login" class="btn" >Login</a>
-        <a href="adminlogin" class="btn" >admin</a>
       </nav>
     </header>
   
@@ -33,7 +32,7 @@
   
         <div class="search-bar">
           <input type="text" placeholder="Search internships by title, company, or location..." />
-          <button>Search</button>
+          <button><a href="/search">Search</a></button>
         </div>
       </div>
     </section>
@@ -61,7 +60,7 @@
     </section>
   
  
-    <section class="companies">
+    <section id="companies" class="companies">
       <h2>Trusted by Leading Companies</h2>
       <div class="company-logos">
         <img src="assets/logos/google.png" alt="Google" />

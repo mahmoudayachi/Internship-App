@@ -1,3 +1,17 @@
+<header class="navbar">
+  <div class="logo">IntenrshiApp</div>
+  
+  <div class="menu-icon" id="menu-icon" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <nav>
+    <a href="#">Home</a>
+
+  </nav>
+</header>
+
 <div class="search-container">
   
     <aside class="filters">
@@ -22,8 +36,9 @@
         <label>Duration</label>
         <select (change)="ondurationchange($event)" >
           <option value="">Any</option>
-          <option value="1">1 Month</option>
+          <option value="2">2 Months</option>
           <option value="3">3 Months</option>
+          <option value="4">4 Months</option>
           <option value="6">6 Months</option>
         </select>
       </div>
@@ -47,10 +62,10 @@
      <input
        type="text"
       id="technology"
-     placeholder="e.g. Angular, Spring Boot" (input)="onFilterChange()" />
+     placeholder="e.g. Angular, Spring Boot" (input)="onFilterChange($event)" />
      </div>
   
-      <button class="filter-btn" (click)="loadInternships()">Apply Filters</button>
+  
     </aside>
   
     <section class="offers">
@@ -68,7 +83,7 @@
             <div class="meta-block">
               <span *ngIf="offer.status=='AVAILABLE'" class="status badge available">{{offer.status}}</span>
               <span *ngIf="offer.status=='EXPIRED'" class="status badge expired">{{offer.status}}</span>
-              <span *ngIf="offer.status=='AVAILABLE'" class="status badge available ">{{offer.internshiptype}}</span>
+              <span  class="status badge available ">{{offer.internshiptype}}</span>
             </div>
           </div>
   
@@ -81,16 +96,15 @@
               <span class="info">Location: {{offer.location}}</span>
               <span class="info">Duration: {{offer.duration}} months</span>
               <div class="techs">
-                <span class="tech">Angular</span>
-                <span class="tech">TypeScript</span>
-                <span class="tech">HTML/CSS</span>
-               
+                @for(x of offer.skills;track x ){
+                <span class="tech">{{x}}</span>
+                }
               </div>
              
             </div>
             <div class="actions">
               <button (click)="viewofferdetails(offer.id)"  class="btn secondary">view</button>
-              <button (click)="savepost(offer.id)" id="save" [disabled]="disablebtn(offer.id)"  class="save-btn" >save</button>
+              <button (click)="savepost(offer.id)" id="save"   class="save-btn" >save</button>
             </div>
           </div>
           

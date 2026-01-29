@@ -47,6 +47,7 @@ export class StudentService {
     duration?:string
     status?: string;
     type?: string;
+    skills?:string;
     page?: number;
     size?: number;
     sortBy?: string;

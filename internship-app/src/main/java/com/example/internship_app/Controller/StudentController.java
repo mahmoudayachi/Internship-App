@@ -138,7 +138,7 @@ public class StudentController {
 
 
     @PutMapping("/update/student/{id}")
-    public  ResponseEntity<StudentDTO> updatestudentprofile(@PathVariable Long id , @ModelAttribute Student student, @RequestParam("image") MultipartFile image) throws IOException {
+    public  ResponseEntity<StudentDTO> updatestudentprofile(@PathVariable Long id , @ModelAttribute Student student,  MultipartFile image) throws IOException {
         return ResponseEntity.ok(studentService.Updateprofile(id,student,image));
 
     }
@@ -150,6 +150,7 @@ public class StudentController {
             @RequestParam(required = false) String description,
             @RequestParam(required = false) InternshipType type,
             @RequestParam(required = false) String title,
+            @RequestParam(required = false) List<String> skills,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
@@ -161,7 +162,7 @@ public class StudentController {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        return internshipPostService.getFilteredInternshipsPaged(status, location ,duration,type, title,description,pageable);
+        return internshipPostService.getFilteredInternshipsPaged(status, location ,duration,type, title,skills,description,pageable);
     }
     @GetMapping("/search/all")
     public ResponseEntity<?> GetAllInternshippost(){

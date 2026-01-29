@@ -20,7 +20,8 @@
         <button class="menu-btn" (click)="toggleSidebar()">☰</button>
         <h1>Welcome, <span class="styled-span" >{{ companyName }}</span></h1>
         <div class="profile">
-          <img  src="http://localhost:8080/company/Logo/{{Logo}}" alt="Company Logo">
+          <img   src="http://localhost:8080/company/Logo/{{Logo}}" alt="Company Logo">
+
         </div>
       </header>
   
@@ -43,10 +44,11 @@
         <div class="recent-section">
           <h2>Recent Applications</h2>
           <div class="applications-list">
-            <div class="app-card" *ngFor="let app of recentApplications">
-              <h4>{{ app.studentName }}</h4>
-              <p>{{ app.offerTitle }}</p>
-              <span class="status" [class.pending]="app.status === 'Pending'" [class.accepted]="app.status === 'Accepted'" [class.rejected]="app.status === 'Rejected'">
+            <div class="app-card" *ngFor="let app of listofapplications">
+              <h4>{{ app.student.fullName }}</h4>
+              <p>{{ app.internshipOffer
+                .title }}</p>
+              <span class="status" [class.pending]="app.status === 'PENDING'" [class.accepted]="app.status === 'ACCEPTED'" [class.rejected]="app.status === 'REJECTED'">
                 {{ app.status }}
               </span>
             </div>
@@ -105,17 +107,12 @@
             <label for="Applydeadline">Apply Deadline</label>
             <input formControlName="applydeadline" type="date" id="Applydeadline" required>
           </div>
-          <label>Skills</label>
-             
-          <input
-            placeholder="add skills"
-            [matChipInputFor]="reactiveChipGrid"
-            (matChipInputTokenEnd)="addReactiveKeyword($event)"
-            class="input"
-            id="chips"
-         
-          />
-          <mat-chip-grid #reactiveChipGrid aria-label="Enter reactive form keywords" [formControl]="formControl">  
+
+          
+          <label>skills</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Skills</mat-label>
+           <mat-chip-grid #reactiveChipGrid aria-label="Enter reactive form keywords" [formControl]="formControl">  
             @for (keyword of reactiveKeywords(); track keyword) {
               <mat-chip-row (removed)="removeReactiveKeyword(keyword)">
                 {{keyword}}
@@ -124,29 +121,39 @@
               </button>
               </mat-chip-row>
             }
-            </mat-chip-grid>
-
-
-            <label>requirements</label>
-          
-          <input
-            placeholder="add requirements"
+            <input
+            placeholder="add a skill and hit enter"
             [matChipInputFor]="reactiveChipGrid"
-            (matChipInputTokenEnd)="addsecondReactiveKeyword($event)"
+            (matChipInputTokenEnd)="addReactiveKeyword($event)"
             class="input"
             id="chips"
-         
-          />
-          <mat-chip-grid #reactiveChipGrid aria-label="Enter reactive form keywords" [formControl]="secondformControl">     
-            @for (key of secondreactivekeywords(); track key) {
-              <mat-chip-row (removed)="removesecondReactiveKeyword(key)">
-                {{key}}
-              <button matChipRemove [attr.aria-label]="'remove reactive form' + key">
-                <span>x</span>
-              </button>
-              </mat-chip-row>
-            }
+          />  
             </mat-chip-grid>
+          </mat-form-field>
+          <label>requirements</label>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>requirements</mat-label>
+            <mat-chip-grid #techGrid aria-label="Enter reactive form keywords" [formControl]="secondformControl">  
+              @for (key of secondreactivekeywords(); track key) {
+                <mat-chip-row (removed)="removesecondReactiveKeyword(key)">
+                  {{key}}
+                <button matChipRemove [attr.aria-label]="'remove reactive form' + key">
+                  <span>x</span>
+                </button>
+                </mat-chip-row>
+              }
+              <input
+              placeholder="add a skill and hit enter"
+              [matChipInputFor]="techGrid"
+              (matChipInputTokenEnd)="addsecondReactiveKeyword($event)"
+              class="input"
+              id="chips"
+            />  
+              </mat-chip-grid>
+
+          </mat-form-field>
+
+         
 
 
          
@@ -211,7 +218,7 @@
               <p class="applicant-date">{{app.applicationDate}}</p>
               <button class="files-btn">
                 <a
-                 href="http://localhost:8080/student/pdf/{{app.motivationLetter}}"
+                 href="http://localhost:8080/student/letter/{{app.motivationLetter}}"
                  type="application/pdf"
                  target="_blank"
                  
@@ -261,7 +268,7 @@
             <div class="form-group logo-section">
               <label for="logo" class="logo-label">Company Logo</label>
               <div class="logo-preview">
-                <img src="{{logoPreview}}" alt="Company Logo" />
+                <img src="{{logoPreview}}"  />
               </div>
               <input type="file" id="logo" accept="image/*" (change)="onLogoSelected($event)" />
             </div>
@@ -313,3 +320,24 @@
 
 
   </div>
+
+
+  <ng-template #successDialog let-data>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions >
+      <button mat-button mat-dialog-close color="primary">OK</button>
+    </mat-dialog-actions>
+  </ng-template>
+
+  <ng-template #errorDialog let-data>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+    <mat-dialog-content>
+      <p>{{ data.message }}</p>
+    </mat-dialog-content>
+    <mat-dialog-actions >
+      <button mat-button mat-dialog-close color="primary">OK</button>
+    </mat-dialog-actions>
+  </ng-template>

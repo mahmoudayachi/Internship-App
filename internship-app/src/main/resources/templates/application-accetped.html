@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; background:#f4f6f8; padding:20px;">
+
+<div style="max-width:600px; margin:auto; background:#ffffff; padding:20px; border-radius:8px;">
+
+    <h2 style="color:#2c3e50;"> Congratulations, <span th:text="${studentName}"></span>!</h2>
+
+    <p>
+        We are pleased to inform you that your application for the internship:
+    </p>
+
+    <p style="font-weight:bold;">
+        <span th:text="${internshipTitle}"></span>
+    </p>
+
+    <p>
+        at <strong th:text="${companyName}"></strong> has been
+        <span style="color:green; font-weight:bold;">ACCEPTED</span>.
+    </p>
+
+    <p>
+        The company will contact you soon with further details.
+    </p>
+
+    <br>
+
+    <p>
+        Best regards,<br>
+        <strong>Internship Portal Team</strong>
+    </p>
+
+</div>
+
+</body>
+
+</html>

@@ -20,19 +20,23 @@ export class SearchComponent {
   status = '';
   type = '';
   duration='';
-  location = '';
+  location = 'sousse';
   title = '';
+  skills ='';
   description ='';
   currentstudent:any
   currentstudentid:any
   responsearray :any =[]
   list_of_saved_post  :any =[]
+  list_of_technologies :any = []
+
   constructor(private studentservice : StudentService,private router : Router){
 
   }
   loadInternships(): void {
     this.studentservice.searchInternships({
       title: this.title.toLowerCase(),
+      skills: this.skills,
       description:this.description,
       location: this.location.toLowerCase(),
       duration:this.duration,
@@ -45,6 +49,7 @@ export class SearchComponent {
     }).subscribe({
       next: (data: any) => {
         this.listofinternshippost = data.content;
+        this.list_of_technologies  = data.content.skills
         console.log(this.listofinternshippost)
         this.totalElements = data.totalElements;
       },
@@ -63,6 +68,7 @@ export class SearchComponent {
   
   ondurationchange(event:any){
     this.duration = event.target.value
+    this.location =''
     this.loadInternships()
   }
   onlocationChange(event:any){
@@ -77,11 +83,14 @@ export class SearchComponent {
 
   onstatusChange(event:any){
     this.status = event.target.value
+    this.location =''
     this.loadInternships()
 
   }
-  onFilterChange(): void {
-    this.page = 0; 
+  onFilterChange(event:any)  {
+    this.skills =event?.target.value
+    this.location=''
+    this.loadInternships()
 
   }
   onPageChange(newPage: number): void {
@@ -100,18 +109,23 @@ export class SearchComponent {
      this.currentstudentid =obj.id
      this.loadInternships()
      
-     this.studentservice.getSavedInternships(this.currentstudentid).subscribe({
-       next:(res=>{
-         this.list_of_saved_post =res
-         console.log(this.list_of_saved_post)
-        
-       }),
-       error:(err=>{
-         console.log(err)
-       })
-     })
+     this.Getsavedinternships();
+     
     
 
+  }
+
+  Getsavedinternships(){
+    this.studentservice.getSavedInternships(this.currentstudentid).subscribe({
+      next:(res=>{
+        this.list_of_saved_post =res
+        console.log(this.list_of_saved_post)
+       
+      }),
+      error:(err=>{
+        console.log(err)
+      })
+    })
   }
   disablebtn(postid:any){
     const alreadySaved = this.list_of_saved_post.some(
@@ -126,6 +140,7 @@ export class SearchComponent {
   }
 
   savepost(postid:any ){
+    this.Getsavedinternships()
     const alreadySaved = this.list_of_saved_post.some(
       (post: { id: any; }) => post.id === postid
     );
@@ -142,8 +157,7 @@ export class SearchComponent {
         
         if (isSaved) {
           alert(' Internship saved successfully!');
-           const savebtn =document.querySelector(".save-btn");
-           savebtn?.classList.toggle("clicked")
+          this.Getsavedinternships()
        
         } else {
           alert(' problem could not save internship offer !');

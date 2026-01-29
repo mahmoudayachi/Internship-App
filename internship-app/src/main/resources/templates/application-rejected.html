@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="font-family: Arial, sans-serif; background:#f4f6f8; padding:20px;">
+
+
+<div style="max-width:600px; margin:auto; background:#ffffff; padding:20px; border-radius:8px;">
+
+    <h2 style="color:#e74c3c;">
+        Application Update – Internship Opportunity
+    </h2>
+
+    <p>
+        Hello <strong th:text="${studentName}"></strong>,
+    </p>
+
+    <p>
+        Thank you for your interest in the internship position:
+    </p>
+
+    <p style="font-weight:bold;">
+        <span th:text="${internshipTitle}"></span>
+    </p>
+
+    <p>
+        at <strong th:text="${companyName}"></strong>.
+    </p>
+
+    <p>
+        After careful review, we regret to inform you that your application
+        was not selected at this time.
+    </p>
+
+    <p>
+        Please note that this decision does not reflect your skills or potential.
+        We strongly encourage you to continue applying for other opportunities
+        on our platform.
+    </p>
+
+    <br>
+
+    <p>
+        We wish you every success in your future career.
+    </p>
+
+    <br>
+
+    <p>
+        Best regards,<br>
+        <strong>Internship Portal Team</strong>
+    </p>
+
+</div>
+</body>
+</html>

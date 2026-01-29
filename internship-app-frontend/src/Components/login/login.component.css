@@ -1,3 +1,62 @@
+
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background: linear-gradient(to right, #00b4d8, #0077b6);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color:white
+  }
+    a {
+      color: white;
+      text-decoration: none;
+    }
+  .navbar nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .navbar nav a {
+    text-decoration: none;
+    color: white;
+    transition: color 0.3s ease;
+  }
+  
+
+  
+  .btn {
+    background-color: #0077b6;
+    color: white !important;
+    padding: 8px 16px;
+    border-radius: 4px;
+  }
+  
+
+  .menu-icon {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+  }
+  
+  .menu-icon div {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    border-radius: 3px;
+    transition: 0.3s;
+  }
+
+
 .auth-container {
     display: flex;
     justify-content: center;
@@ -7,7 +66,17 @@
     padding: 20px;
     flex-wrap: wrap;
   }
-  
+  span{
+    position: absolute;
+    left: 1rem;
+    top:1rem;
+    color: white;
+    font-size: 2em;
+  }
+  a {
+    text-decoration: none;
+    color: white;
+  }
   .auth-box {
     background: white;
     padding: 40px 50px;

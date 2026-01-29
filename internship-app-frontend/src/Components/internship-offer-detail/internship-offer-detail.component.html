@@ -1,4 +1,26 @@
-<div class="offer-detail-container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">IntenrshiApp</div>
+    
+    <div class="menu-icon" id="menu-icon" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <nav>
+      <a href="#">Home</a>
+  
+    </nav>
+  </header>
+  <div class="offer-detail-container">
  
     <div class="offer-header">
       <img
@@ -23,22 +45,24 @@
   
       <h3>Requirements</h3>
       <ul>
-        <li>Strong knowledge of Angular or React</li>
-        <li>Basic understanding of REST APIs</li>
-        <li>Good problem-solving and communication skills</li>
+        @for(requirement of list_of_requirements;track requirement){
+        <li>{{requirement}}</li>
+      }
       </ul>
   
       <h3>Technologies</h3>
+      
       <div class="tech-tags">
-        <span class="tag">Angular</span>
-        <span class="tag">TypeScript</span>
-        <span class="tag">HTML/CSS</span>
-      </div>
-  
+        @for(skill of list_of_technoloiges;track skill){
+        <span class="tag">{{skill}}</span>
+      
+    }
+  </div>
       <h3>Additional Information</h3>
       <p><strong>Duration:</strong> {{InternshipPostdetails.duration}} months</p>
       <p><strong>Location:</strong> {{InternshipPostdetails.location}}</p>
-      <p><strong>startingdate:</strong> {{InternshipPostdetails.location}}</p>
+      <p><strong>starting-date:</strong> {{InternshipPostdetails.startDate}}</p>
+      <p><strong>apply-deadline:</strong> {{InternshipPostdetails.applydeadline}}</p>
     </div>
   
     <div class="offer-footer">
@@ -47,3 +71,6 @@
   
   </div>
  
+</body>
+</html>
+

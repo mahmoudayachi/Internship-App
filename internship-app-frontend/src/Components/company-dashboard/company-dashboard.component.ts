@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ShareConfig } from 'rxjs';
@@ -8,14 +8,18 @@ import { StorageService } from '../../Storage/storage.service';
 import {MatChipInputEvent, MatChipsModule} from '@angular/material/chips';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatStepperModule} from '@angular/material/stepper';
-import {MatButtonModule} from '@angular/material/button';
+import {MatButtonModule, MatIconButton} from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { RefreshService } from '../../Services/refresh.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { SharedstateService } from '../../Services/sharedstate.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-company-dashboard',
   standalone: true,
   imports: [RouterLink,NgIf,NgFor,ReactiveFormsModule,MatIconModule,
-    MatChipsModule,MatFormFieldModule,],
+    MatChipsModule,MatFormFieldModule,MatIconButton,MatDialogModule],
   templateUrl: './company-dashboard.component.html',
   styleUrl: './company-dashboard.component.css'
 })
@@ -43,9 +47,12 @@ export class CompanyDashboardComponent {
   logoPreview: string | ArrayBuffer | null = null;
   skillsarray: string[] = [];
   requirementsarray :string[] =[];
-  internshippost !:FormGroup
+  internshippost !:FormGroup;
+  display_placeholder_image :boolean =false;
 
-  constructor(private router :Router,private fb: FormBuilder,private companyservice :CompanyService ){
+  @ViewChild('successDialog') successDialog!: TemplateRef<any>;
+  @ViewChild('errorDialog') errorDialog!: TemplateRef<any>;
+  constructor(private router :Router,private fb: FormBuilder,private companyservice :CompanyService , private refreshService: RefreshService ,private dialog: MatDialog,private appState: SharedstateService){
     this.updateProfileForm = this.fb.group({
       fullName: ['', Validators.required],
       companysize: ['', Validators.required],
@@ -53,7 +60,7 @@ export class CompanyDashboardComponent {
       location: ['', Validators.required],
       email:['',Validators.required],
       password:['',Validators.required],
-      logo: [null]
+      companyLogo: [null]
     });
 
     this.internshippost = this.fb.group({
@@ -65,20 +72,28 @@ export class CompanyDashboardComponent {
        startDate : ['',Validators.required],
        endDate : ['',Validators.required],
        applydeadline : ['',Validators.required],
-       requirements: ['',Validators.required],
        description: ['',Validators.required],
 
       
     })
   }
-  recentApplications = [
-    { studentName: 'John Doe', offerTitle: 'Frontend Developer', status: 'Pending' },
-    { studentName: 'Sarah Lee', offerTitle: 'Data Analyst Intern', status: 'Accepted' },
-    { studentName: 'Ahmed Ben', offerTitle: 'Backend Developer', status: 'Rejected' },
-  ];
 
+
+  showSuccessDialog(title: string, message: string) {
+    this.dialog.open(this.successDialog, {
+      data: { title, message }
+    });
+  }
+
+  showerrorDialog(title:string,message:string){
+    this.dialog.open(this.errorDialog,{
+      data:{title,message}
+    })
+  }
   ngOnInit(){
-   
+
+  
+  
     this.displaymaindashboard()
     this.currentuser = StorageService.getUser()
     const json = this.currentuser;
@@ -86,7 +101,21 @@ export class CompanyDashboardComponent {
      this.currentuserid =obj.id
      this.internshippost.patchValue({ company_id: this.currentuserid });
 
-     this.companyservice.GetInternshippostbycompanyById(this.currentuserid).subscribe({
+     this.loadAllData(); 
+     
+   
+
+     this.refreshService.refresh$.subscribe(() => {
+      this.loadAllData(); 
+    });
+
+
+    
+  }
+
+
+  loadAllData() {
+    this.companyservice.GetInternshippostbycompanyById(this.currentuserid).subscribe({
       next:(res=>{
         this.listofinternshipposts = res
         this.activeOffers = this.listofinternshipposts.length
@@ -112,19 +141,17 @@ export class CompanyDashboardComponent {
        next:(res=>{
          this.listofapplications =res
          this.applicants = this.listofapplications.length
+         this.acceptedInterns = this.listofapplications.filter((app: any) => app.status === "ACCEPTED").length;
          console.log(this.listofapplications)
        }),
        error:(err=>{
          console.log(err)
        })
      })
-
-
-    
   }
 
-  readonly reactiveKeywords = signal(['']);
-  readonly formControl = new FormControl(['']);
+  readonly reactiveKeywords = signal<string[]>([]);
+  readonly formControl = new FormControl<string[]>([]);
   announcer = inject(LiveAnnouncer);
 
   removeReactiveKeyword(keyword: string) {
@@ -135,7 +162,7 @@ export class CompanyDashboardComponent {
       }
 
       keywords.splice(index, 1);
-      this.skillsarray.splice(index)
+      this.skillsarray.splice(index, 1);
       console.log(this.skillsarray)
       this.announcer.announce(`removed ${keyword} from reactive form`);
     
@@ -145,9 +172,10 @@ export class CompanyDashboardComponent {
    
  
 
-  readonly secondreactivekeywords =signal([''])
-  readonly secondformControl = new FormControl(['']);
+  readonly secondreactivekeywords =signal<string[]>([])
+  readonly secondformControl = new FormControl<string[]>([]);
   addsecondReactiveKeyword(event: MatChipInputEvent): void {
+   
     const value = (event.value || '').trim();
 
     if (value) {
@@ -188,6 +216,10 @@ export class CompanyDashboardComponent {
  
 
   submit(){
+     if(!this.internshippost.valid){
+       alert("all fields must not be empty")
+     }
+     else{
       const data = new FormData()
       data.append("company_id",this.internshippost.controls["company_id"].value??'')
      data.append("title",this.internshippost.controls["title"].value??'')
@@ -219,7 +251,9 @@ export class CompanyDashboardComponent {
        next:(res)=>{
         console.log(res)
          if(res.company_id!=null){
-           alert("internship post addedd succsessfully")
+          this.showSuccessDialog('Success !', ' internship post addedd succsessfully!')
+           this.internshippost.reset();
+           this.refreshService.trigger();
           
          }
        },
@@ -227,34 +261,19 @@ export class CompanyDashboardComponent {
          console.log(err)
        })
      })
+    }
       }
       
       
     
   
 
-  Submitpost(){
-    if(!this.internshippost.valid){
-      alert("all fields must be filled ")
-    }
-    else{
-      console.log(this.internshippost.value)
-    this.companyservice.AddInternshipPost(this.internshippost.value).subscribe({
-      next:(res=>{
-         console.log(res)
-         if(res.id!=null){
-           alert("internshippost added successfully");
-         }
-      }),
-      error :(err)=>{
-        console.log(err)
-      }
-    })
 
 
 
-  }
-  }
+
+  
+  
 
 
   changestatus(event:any,id:any){
@@ -263,7 +282,8 @@ export class CompanyDashboardComponent {
       next:(res=>{
         console.log(res)
         if(res.id!=null){
-          alert(" internship post status changed successfully ")
+          this.showSuccessDialog('Success !', ' internship post status changed successfully!')
+          this.refreshService.trigger();
         }
       }),
       error:(err=>{
@@ -277,10 +297,13 @@ export class CompanyDashboardComponent {
      if(anwser=="yes"){
      this.companyservice.DeleteInternshipPost(postid).subscribe({
        next:(res=>{
-         alert("post deleted successfully")
+        this.showSuccessDialog('Success !', ' post deleted successfully!')
+         this.listofinternshipposts = this.listofinternshipposts.filter((p: { id: any; }) => p.id !== postid);
          console.log(res)
+         this.refreshService.trigger();
        }),
        error:(err=>{
+         alert("interns already applied to this offer you can not delete it ")
          console.log(err)
        })
      })
@@ -299,6 +322,7 @@ export class CompanyDashboardComponent {
   }
 
   displaymaindashboard(){
+    this.loadAllData()
     this.receivedapplications =false
     this.addpostclicked =false
     this.maindashboardisclicked=true
@@ -314,7 +338,6 @@ export class CompanyDashboardComponent {
     this.updateprofileclicked =false
   }
   Displaycurrentoffers(){
-  
     this.receivedapplications =false
     this.currentinternshipofferclicked =true
     this.addpostclicked =false
@@ -350,8 +373,9 @@ export class CompanyDashboardComponent {
   AcceptOffer(id :any ){
     this.companyservice.AcceptOffer(id).subscribe({
       next:(res=>{
-        alert("offer accepted  ")
-        this.displayReceivedApplicaitons()
+        this.showSuccessDialog('Success !', ' offer accepted!')
+        this.refreshService.trigger();
+       
        
       }),
       error:(err=>{
@@ -362,8 +386,9 @@ export class CompanyDashboardComponent {
   RejectOffer(id :any ){
     this.companyservice.RejectOffer(id).subscribe({
       next:(res=>{
-        alert("offer Rejected ")
-        this.displayReceivedApplicaitons()
+        this.showSuccessDialog('Success !', ' offer rejected!')
+        this.refreshService.trigger();
+     
       }),
       error:(err=>{
         console.log(err)
@@ -376,7 +401,7 @@ export class CompanyDashboardComponent {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files[0]) {
       const file = fileInput.files[0];
-      this.updateProfileForm.patchValue({ logo: file });
+      this.updateProfileForm.patchValue({ companyLogo: file });
 
       const reader = new FileReader();
       reader.onload = e => (this.logoPreview = reader.result);
@@ -390,15 +415,17 @@ export class CompanyDashboardComponent {
     form.append("companysize",this.updateProfileForm.value.companysize);
     form.append('description', this.updateProfileForm.value.description);
     form.append('location', this.updateProfileForm.value.location);
-    form.append('logo', this.updateProfileForm.value.logo);
+    form.append('logo', this.updateProfileForm.value.companyLogo);
     form.append('email', this.updateProfileForm.value.email);
-    form.append('password', this.updateProfileForm.value.email);
+    form.append('password', this.updateProfileForm.value.password);
     form.append("role","COMPANY")
-    console.log(form.get('logo'))
     this.companyservice.UpdateProfile(this.currentuserid,form).subscribe({
       next:(res=>{
         if(res.id!=null){
-          alert("company profile updated successfully ")
+
+          console.log(res)
+          this.showSuccessDialog('Success !', ' company profile updated successfully!')
+          //this.refreshService.trigger();
         }
       }),
       error:(err=>{

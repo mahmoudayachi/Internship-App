@@ -64,40 +64,54 @@ public class AdminService {
     }
 
 
-    public Page<Student> getAllStudents(Pageable pageable) {
-        return studentRepository.findAll(pageable);
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
     }
 
-    public Page<Company> getAllCompany(Pageable pageable){
-        return companyRepository.findAll(pageable);
+    public List<Company> getAllCompany(){
+        return companyRepository.findAll();
     }
 
-    public Page<InternshipPost> getAllInternshipPosts(Pageable pageable){
-        return internshipPostRepository.findAll(pageable);
+    public List<InternshipPost> getAllInternshipPosts(){
+        return internshipPostRepository.findAll();
     }
 
-   public void changeStudentAccountStatus(Long id , AccountStatus status){
+   public Student changeStudentAccountStatus(Long id , AccountStatus status){
     Student   student = studentRepository.findById(id).orElseThrow(()->new RuntimeException("student not found"));
     student.setAccountStatus(status);
     studentRepository.save(student);
        if(status.toString().equals("ACTIVATED")){
-           emailService.sendmail(student.getEmail(),"account verification done","your account has been activated you can login now");
+           emailService.sendStudentAccountActivatedEmail(
+                   student.getEmail(),
+                   student.getFullName()
+           );
        }
        else if (status.toString().equals("DESACTIVATED")){
-           emailService.sendmail(student.getEmail(),"account desactivation","your account has been desactivated ");
+           emailService.sendStudentAccountDeactivatedEmail(
+                   student.getEmail(),
+                   student.getFullName()
+           );
        }
+       return  student;
    }
 
-    public void changeCompanyAccountStatus(Long id , AccountStatus status){
+    public Company changeCompanyAccountStatus(Long id , AccountStatus status){
         Company   company = companyRepository.findById(id).orElseThrow(()->new RuntimeException("student not found"));
         company.setAccountStatus(status);
         companyRepository.save(company);
         if(status.toString().equals("ACTIVATED")){
-            emailService.sendmail(company.getEmail(),"account verification done","your account has been activated you can login now");
+            emailService.sendCompanyAccountActivatedEmail(
+                    company.getEmail(),
+                    company.getFullName()
+            );
         }
         else if (status.toString().equals("DESACTIVATED")){
-            emailService.sendmail(company.getEmail(),"account desactivation","your account has been desactivated ");
+            emailService.sendCompanyAccountDeactivatedEmail(
+                    company.getEmail(),
+                    company.getFullName()
+            );
         }
+        return company;
     }
 
 

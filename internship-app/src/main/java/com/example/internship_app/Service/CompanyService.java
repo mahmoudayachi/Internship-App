@@ -59,15 +59,7 @@ public class CompanyService {
         application.setStatus(ApplicationStatus.ACCEPTED);
         applicationRepository.save(application);
 
-        String studentEmail = application.getStudent().getEmail();
-        String subject = " Internship Application Accepted";
-        String body = "Hello " + application.getStudent().getFullName() + ",\n\n" +
-                "Congratulations! Your application for the internship offer '" +
-                application.getInternshipOffer().getTitle() + "  with the company   "+application.getInternshipOffer().getCompany().getFullName()+" has been accepted.\n\n" +
-                "The company will contact you soon with further details.\n\n" +
-                "Best regards,\nInternship Portal Team";
-
-        emailService.sendmail(studentEmail, subject, body);
+        emailService.sendAcceptedApplicationEmail(application.getStudent().getEmail(),application.getStudent().getFullName(),application.getInternshipOffer().getTitle(),application.getInternshipOffer().getCompany().getFullName());
 
         return getApplicationDto(application);
     }
@@ -79,15 +71,7 @@ public class CompanyService {
         applicationRepository.save(application);
 
 
-        String studentEmail = application.getStudent().getEmail();
-        String subject = " Internship Application Rejected";
-        String body = "Hello " + application.getStudent().getFullName()+ ",\n\n" +
-                "We regret to inform you that your application for the internship offer '" +
-                application.getInternshipOffer().getTitle() +"with the company   "+application.getInternshipOffer().getCompany().getFullName()+ "' has been rejected.\n\n" +
-                "Don't give up! You can explore more offers in our portal.\n\n" +
-                "Best regards,\nInternship Portal Team";
-
-        emailService.sendmail(studentEmail, subject, body);
+        emailService.sendRejectedApplicationEmail(application.getStudent().getEmail(),application.getStudent().getFullName(),application.getInternshipOffer().getTitle(),application.getInternshipOffer().getCompany().getFullName());
 
         return getApplicationDto(application);
     }
@@ -98,14 +82,15 @@ public class CompanyService {
         existingcompany.setDescription(company.getDescription());
         existingcompany.setCompanysize(company.getCompanysize());
         existingcompany.setEmail(company.getEmail());
-        existingcompany.setPassword(new BCryptPasswordEncoder().encode(company.getPassword()));
-        existingcompany.setFullName(company.getFullName());
-        if(logo!=null) {
-            String originallogoname = logo.getOriginalFilename();
-            Path filenameandpath = Paths.get(logodirectory, originallogoname);
-            Files.write(filenameandpath, logo.getBytes());
-            existingcompany.setCompanyLogo(originallogoname);
+        if(company.getPassword()!=null && !company.getPassword().isBlank()  ) {
+            existingcompany.setPassword(new BCryptPasswordEncoder().encode(company.getPassword()));
         }
+        existingcompany.setFullName(company.getFullName());
+        String originallogoname = logo.getOriginalFilename();
+        Path filenameandpath = Paths.get(logodirectory, originallogoname);
+        Files.write(filenameandpath, logo.getBytes());
+        existingcompany.setCompanyLogo(originallogoname);
+
         Company updatecompany = companyRepository.save(existingcompany);
         CompanyDTO companyDTO = new CompanyDTO();
         return companyDTO.getcompanydto(updatecompany);

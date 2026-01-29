@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SwalComponent } from '@sweetalert2/ngx-sweetalert2';
+import Swal from 'sweetalert2';
 import { AuthService } from '../../Services/auth.service';
 import { StorageService } from '../../Storage/storage.service';
 
@@ -43,7 +45,12 @@ export class LoginComponent {
             StorageService.saveToken(res.jwt);
             console.log(StorageService.getUserRole())
             if(StorageService.isStudentLoggedIn()){
-              alert(" student  logged in successfully")
+              Swal.fire({
+                title: "Good job!",
+                text: "You clicked the button!",
+                icon: "success"
+              })
+            
               this.router.navigateByUrl("/student-dashboard")
             } 
             else if(StorageService.isCompanyLoggedIn()){

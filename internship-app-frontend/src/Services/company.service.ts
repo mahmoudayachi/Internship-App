@@ -29,11 +29,11 @@ export class CompanyService {
 
 
    DeleteInternshipPost(id :any):Observable<any>{
-     return this.http.delete("http://localhost:8080/company" + "/delete/" + `${id}`);
+     return this.http.delete("http://localhost:8080/company" + "/delete/" + `${id}`,{ responseType: 'text' });
    }
 
    UpdateProfile(id:any, updateprofile:any):Observable<any>{
-     return this.http.put("http://localhost:8080/company/update/" +`${id}`,updateprofile)
+     return this.http.put("http://localhost:8080/company/updateprofile/" +`${id}`,updateprofile)
     }
 
 

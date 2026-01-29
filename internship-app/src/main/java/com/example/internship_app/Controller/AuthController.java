@@ -97,7 +97,7 @@ public class AuthController {
         Optional<Student> student = studentRepository.findFirstByEmail(authenticationRequest.getEmail());
         if(student.isEmpty()){
             Map<String, String> error = new HashMap<>();
-            error.put("error", "student account not found");
+            error.put("error", "student account doesn't exist  ");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
         Student existingstudent = student.get();
@@ -131,7 +131,7 @@ public class AuthController {
         Optional<Company> company = companyRepository.findFirstByEmail(authenticationRequest.getEmail());
         if(company.isEmpty()){
             Map<String, String> error = new HashMap<>();
-            error.put("error", "company account not found");
+            error.put("error", "company account doesn't exist");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
         Company existingcompany = company.get();

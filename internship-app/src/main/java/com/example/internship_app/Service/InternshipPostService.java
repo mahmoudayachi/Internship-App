@@ -89,13 +89,14 @@ public class InternshipPostService {
     }
 
 
-    public Page<InternshipPost> getFilteredInternshipsPaged(InternshipPostStatus status, String location,String duration, InternshipType type,String title,String description,Pageable pageable) {
+    public Page<InternshipPost> getFilteredInternshipsPaged(InternshipPostStatus status, String location,String duration, InternshipType type,String title,List<String> skills,String description,Pageable pageable) {
         if (location != null && location.isBlank()) location = null;
         if (duration != null && duration.isBlank()) duration = null;
         if (status != null && status.toString().equalsIgnoreCase("All")) status = null;
         if (type != null && type.toString().equalsIgnoreCase("All")) type = null;
+        if (skills != null && skills.isEmpty()) skills = null;
 
-        return internshipPostRepository.searchInternships(title, description,location,duration,status,type,pageable);
+        return internshipPostRepository.searchInternships(title, description,location,duration,status,type,skills,pageable);
     }
 
     public List<InternshipPost> GetAllInternshipPosts(){

@@ -28,11 +28,11 @@ export class AdminserviceService {
     return this.http.get("http://localhost:8080/Admin/all/internshipposts")
   }
   updateaccountstatus(id:any,status:any):Observable<any>{
-    return this.http.put("http://localhost:8080/Admin/update/status/"+`${id}`+"/"+`${status}`,null)
+    return this.http.put("http://localhost:8080/Admin/update/status/"+`${id}`+"/"+`${status}`,{ responseType: 'text' })
 
   }
   updateCompanyaccountStatus(id:any,status:any):Observable<any>{
-    return this.http.put("http://localhost:8080/Admin/update/company/status/"+`${id}`+"/"+`${status}`,null)
+    return this.http.put("http://localhost:8080/Admin/update/company/status/"+`${id}`+"/"+`${status}`,{ responseType: 'text' })
   }
   
   
